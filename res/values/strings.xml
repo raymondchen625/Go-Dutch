@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, GoDutch!</string>
+    <string name="app_name">Go Dutch</string>
+<string name="newActivity">新建活动</string>
+<string name="quickAddTransaction">快速添加账务</string>
+<string name="menuNameAbout">关于</string>
+<string name="menuNameSetting">设置</string>
+</resources>
