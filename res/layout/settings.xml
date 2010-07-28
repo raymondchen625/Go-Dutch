@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:orientation="horizontal">
+	<TableRow>
+		<TextView android:text="@string/activityNumberOnHomePage" android:id="@+id/TextView01"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+		<EditText android:id="@+id/activityNumberEditText"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="right" android:text="3"></EditText>
+	</TableRow>
+	<TableRow>
+		<TextView android:text="@string/displayTaxRate" android:id="@+id/TextView02"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+
+	<CheckBox android:text="@+id/displayTaxRateCheckBox" android:id="@+id/CheckBox01" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+</TableRow>
+</TableLayout>

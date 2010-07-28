@@ -12,7 +12,8 @@
             </intent-filter>
         </activity>
 
-    </application>
+    <activity android:name=".activity.SettingsActivity" android:launchMode="standard" android:label="@string/menuNameSetting"></activity>
+</application>
 
 
 </manifest> 

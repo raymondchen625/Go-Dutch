@@ -6,4 +6,6 @@
 <string name="quickAddTransaction">快速添加账务</string>
 <string name="menuNameAbout">关于</string>
 <string name="menuNameSetting">设置</string>
+<string name="activityNumberOnHomePage">主页显示活动数</string>
+<string name="displayTaxRate">是否显示税率</string>
 </resources>
