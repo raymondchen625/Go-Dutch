@@ -19,29 +19,30 @@ public class SettingsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.settings);
 		this.defaultActivitiesEditText = (EditText) findViewById(R.id.activityNumberEditText);
 		this.displayTaxRateCheckBox = (CheckBox) findViewById(R.id.displayTaxRateCheckBox);
-		setContentView(R.layout.settings);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-//		Integer v = Integer.getInteger(defaultActivitiesEditText.getText()
-//				.toString());
-//		if (v != null) {
-//			defaultActivityNumber = v;
-//		}
-//		displayTaxRate = displayTaxRateCheckBox.isChecked();
+		Integer v = Integer.getInteger(defaultActivitiesEditText.getText()
+				.toString());
+		if (v != null) {
+			defaultActivityNumber = v;
+		}
+		System.out.println(defaultActivitiesEditText+" - "+ displayTaxRateCheckBox);
+		displayTaxRate = displayTaxRateCheckBox.isChecked();
 
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		defaultActivitiesEditText.setText(defaultActivityNumber);
-//		displayTaxRateCheckBox.setChecked(displayTaxRate);
+		defaultActivitiesEditText.setText(defaultActivityNumber+"");
+		displayTaxRateCheckBox.setChecked(displayTaxRate);
 	}
 
 }

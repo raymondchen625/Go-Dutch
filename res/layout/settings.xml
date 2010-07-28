@@ -12,6 +12,6 @@
 		<TextView android:text="@string/displayTaxRate" android:id="@+id/TextView02"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
-	<CheckBox android:text="@+id/displayTaxRateCheckBox" android:id="@+id/CheckBox01" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+	<CheckBox android:id="@+id/displayTaxRateCheckBox" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
 </TableRow>
 </TableLayout>
