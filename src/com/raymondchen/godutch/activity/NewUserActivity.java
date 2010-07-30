@@ -7,6 +7,7 @@ import com.raymondchen.godutch.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +15,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class NewUserActivity extends Activity {
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean result= super.onKeyDown(keyCode, event);
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        finish ();
+	    }
+	    return result;
+	}
 
 	private EditText nameEditText;
 	private EditText emailEditText;
@@ -37,12 +47,15 @@ public class NewUserActivity extends Activity {
 					user.setEmail(email);
 					DataService.addUser(getApplicationContext(), user);
 					Toast.makeText(getApplicationContext(), getResources().getText(R.string.addusersucceeded), Toast.LENGTH_SHORT).show();
-					finish();
+					resetForm();
 				}
-				
 			}
-			
 		});
+	}
+	
+	private void resetForm() {
+		this.nameEditText.setText("");
+		this.emailEditText.setText("");
 	}
 
 }
