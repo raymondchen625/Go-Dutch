@@ -3,9 +3,22 @@
     <string name="hello">Hello World, GoDutch!</string>
     <string name="app_name">Go Dutch</string>
 <string name="newActivity">新建活动</string>
+<string name="newUser">新建用户</string>
 <string name="quickAddTransaction">快速添加账务</string>
 <string name="menuNameAbout">关于</string>
 <string name="menuNameSetting">设置</string>
+<string name="menuNameUserManagement">用户管理</string>
 <string name="activityNumberOnHomePage">主页显示活动数</string>
 <string name="displayTaxRate">是否显示税率</string>
+<string name="thankyou">多谢使用Go Dutch！</string>
+<string name="author">作者</string>
+<string name="email">E-mail</string>
+<string name="authorName">Raymond Chen</string>
+<string name="authorEmail">raymondchen625@gmail.com</string>
+<string name="studio">Gerald Studio</string>
+<string name="about">关于</string>
+<string name="username">姓名</string>
+<string name="add">添加</string>
+<string name="inputnewuserinfo">请填写姓名以及E-mail地址</string>
+<string name="addusersucceeded">用户已成功添加</string>
 </resources>

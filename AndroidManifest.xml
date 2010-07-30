@@ -12,8 +12,12 @@
             </intent-filter>
         </activity>
 
-    <activity android:name=".activity.SettingsActivity" android:launchMode="standard" android:label="@string/menuNameSetting"></activity>
+    <activity android:name=".activity.SettingsActivity" android:label="@string/menuNameSetting" android:launchMode="singleTask"></activity>
+<activity android:label="@string/about" android:launchMode="singleTask" android:name=".activity.AboutActivity"></activity>
+<activity android:label="@string/menuNameUserManagement" android:name=".activity.UserManagementActivity"></activity>
+<activity android:launchMode="singleTask" android:name=".activity.NewUserActivity" android:label="@string/newUser"></activity>
 </application>
 
 
+<uses-sdk android:minSdkVersion="7"></uses-sdk>
 </manifest> 

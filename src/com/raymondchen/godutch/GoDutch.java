@@ -3,7 +3,9 @@ package com.raymondchen.godutch;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.raymondchen.godutch.activity.AboutActivity;
 import com.raymondchen.godutch.activity.SettingsActivity;
+import com.raymondchen.godutch.activity.UserManagementActivity;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 public class GoDutch extends ListActivity {
 	private static int ABOUT_ITEM_ID = 0;
 	private static int SETTING_ITEM_ID = 1;
+	private static int USER_MANAGEMENT_ITEM_ID=2;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -31,6 +34,14 @@ public class GoDutch extends ListActivity {
 		int groupId = 0;
 		aboutItem = menu.add(groupId, ABOUT_ITEM_ID, Menu.NONE,
 				R.string.menuNameAbout);
+		aboutItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				Intent intent = new Intent(getApplicationContext(),
+						AboutActivity.class);
+				startActivity(intent);
+				return true;
+			}
+		});
 		settingItem = menu.add(groupId, SETTING_ITEM_ID, Menu.NONE,
 				R.string.menuNameSetting);
 		settingItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -41,12 +52,23 @@ public class GoDutch extends ListActivity {
 				return true;
 			}
 		});
+		userManagementItem=menu.add(groupId, USER_MANAGEMENT_ITEM_ID, Menu.NONE,
+				R.string.menuNameUserManagement);
+		userManagementItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				Intent intent = new Intent(getApplicationContext(),
+						UserManagementActivity.class);
+				startActivity(intent);
+				return true;
+			}
+		});
 		return true;
 	}
 
 	private MenuItem aboutItem;
 	private MenuItem settingItem;
-	List<GoDutchActivity> activityList;
+	private MenuItem userManagementItem;
+	List<Trip> activityList;
 	List<User> userList;
 	List<String> screenElementList;
 
@@ -77,17 +99,17 @@ public class GoDutch extends ListActivity {
 	 * 从存储（数据库）中加载和刷新活动列表
 	 */
 	private void loadActivityList() {
-		activityList = new ArrayList<GoDutchActivity>();
-		GoDutchActivity activity = new GoDutchActivity();
+		activityList = new ArrayList<Trip>();
+		Trip activity = new Trip();
 		activity.setName("爬白云山");
 		activityList.add(activity);
-		activity = new GoDutchActivity();
+		activity = new Trip();
 		activity.setName("游泳");
 		activityList.add(activity);
-		activity = new GoDutchActivity();
+		activity = new Trip();
 		activity.setName("去海洋馆旁边的猴山看有没有走失的狒狒");
 		activityList.add(activity);
-		activity = new GoDutchActivity();
+		activity = new Trip();
 		activity.setName("Last activity is always about food");
 		activityList.add(activity);
 

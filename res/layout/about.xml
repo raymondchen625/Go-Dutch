@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+<TextView android:text="@string/thankyou" android:id="@+id/TextViewThankYou" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
+<TextView android:text="@string/author" android:id="@+id/TextViewAuthor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TextView android:text="@string/authorName" android:id="@+id/TextViewAuthorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="15sp"></TextView>
+<TextView android:text="@string/email" android:id="@+id/TextViewEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
+<TextView android:text="@string/authorEmail" android:id="@+id/TextViewAuthorEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="15sp"></TextView>
+<TextView android:text="@string/studio" android:id="@+id/TextViewStudio" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
+</LinearLayout>

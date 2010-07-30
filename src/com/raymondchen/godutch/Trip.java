@@ -3,7 +3,7 @@ package com.raymondchen.godutch;
 import java.util.Date;
 import java.util.List;
 
-public class GoDutchActivity {
+public class Trip {
 	private String name;
 	private Date time;
 	private Integer totalAmount;
