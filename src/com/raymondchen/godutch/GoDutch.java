@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.raymondchen.godutch.activity.AboutActivity;
+import com.raymondchen.godutch.activity.NewTripActivity;
 import com.raymondchen.godutch.activity.SettingsActivity;
 import com.raymondchen.godutch.activity.UserManagementActivity;
 
@@ -90,6 +91,9 @@ public class GoDutch extends ListActivity {
 				Toast.makeText(getApplicationContext(),
 						((TextView) view).getText() + "-" + position,
 						Toast.LENGTH_SHORT).show();
+				if (position==0) {
+					startActivity(new Intent(getApplicationContext(),NewTripActivity.class));
+				}
 			}
 		});
 
@@ -136,7 +140,7 @@ public class GoDutch extends ListActivity {
 
 	private void initializeScreenElements() {
 		screenElementList = new ArrayList<String>();
-		screenElementList.add(getResources().getString(R.string.newActivity));
+		screenElementList.add(getResources().getString(R.string.newTrip));
 		// 加入最近三项活动列表（不足三项加入空标签），一个“全部活动”标签，最后加入一个“快速添加帐务”
 		for (int i = 0; i < DefaultSetting.ACTIVITIES_NUMBER_ON_MAIN_SCREEN; i++) {
 			if (activityList.size() > i) {

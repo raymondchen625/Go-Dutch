@@ -39,7 +39,7 @@ public class NewUserActivity extends Activity {
 			public void onClick(View v) {
 				String name=nameEditText.getText().toString();
 				String email=emailEditText.getText().toString();
-				if (name.length()==0 || email.length()==0) {
+				if (name.length()==0 ) {
 					Toast.makeText(getApplicationContext(), getResources().getText(R.string.inputnewuserinfo), Toast.LENGTH_SHORT).show();
 				} else {
 					User user=new User();

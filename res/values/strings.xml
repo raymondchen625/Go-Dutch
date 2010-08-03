@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello World, GoDutch!</string>
     <string name="app_name">Go Dutch</string>
-<string name="newActivity">新建活动</string>
+<string name="newTrip">新建活动</string>
 <string name="newUser">新建用户</string>
 <string name="quickAddTransaction">快速添加账务</string>
 <string name="menuNameAbout">关于</string>
@@ -19,6 +19,12 @@
 <string name="about">关于</string>
 <string name="username">姓名</string>
 <string name="add">添加</string>
-<string name="inputnewuserinfo">请填写姓名以及E-mail地址</string>
+<string name="inputnewuserinfo">请填写姓名</string>
 <string name="addusersucceeded">用户已成功添加</string>
+<string name="selectedUsers">已选择用户 </string>
+<string name="selectUsers">选择用户</string>
+<string name="create">创建</string>
+<string name="join">参加</string>
+<string name="notjoin">不参加</string>
+<string name="confirm">确认</string>
 </resources>

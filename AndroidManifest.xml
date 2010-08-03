@@ -16,6 +16,8 @@
 <activity android:label="@string/about" android:launchMode="singleTask" android:name=".activity.AboutActivity"></activity>
 <activity android:label="@string/menuNameUserManagement" android:name=".activity.UserManagementActivity"></activity>
 <activity android:launchMode="singleTask" android:name=".activity.NewUserActivity" android:label="@string/newUser"></activity>
+<activity android:name=".activity.NewTripActivity" android:label="@string/newTrip"></activity>
+<activity android:name=".activity.SelectTripUsersActivity" android:label="@string/selectUsers"></activity>
 </application>
 
 

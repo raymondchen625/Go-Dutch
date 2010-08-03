@@ -37,4 +37,18 @@ public class User {
 	 * ÓÃ»§ÓÊ¼þ
 	 */
 	private String email;
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof User) {
+			User u=(User)o;
+			return this.userId!=null && this.userId.equals(u.getUserId());
+		}
+		return false;
+	}
+	@Override
+	public int hashCode() {
+		return this.userId==null?0:this.userId.hashCode();
+	}
+	
+	
 }
