@@ -9,9 +9,12 @@ import com.raymondchen.godutch.DataService;
 import com.raymondchen.godutch.R;
 import com.raymondchen.godutch.User;
 
+import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Interpolator.Result;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.DialogPreference;
@@ -19,6 +22,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +33,8 @@ public class SelectTripUsersActivity extends ListActivity   {
 
 	List<CheckBoxPreference> userCheckboxList;
 	List<User> currentUserList=new ArrayList<User>();
+	List<User> selectedUserList=new ArrayList<User>();
+	
 	List<Map<String,Object>> listContent=new ArrayList<Map<String,Object>>();
 	PreferenceScreen selectTripUserActivity;
 	DialogPreference addNewUser;
@@ -48,10 +55,32 @@ public class SelectTripUsersActivity extends ListActivity   {
 				return false;
 			}
 		});
-		
-
-
 		setListAdapter(adapter);
+		// register ok button listener
+		Button selectUserFinishButton=(Button)findViewById(R.id.selectUserFinishButton);
+		selectUserFinishButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {ListView listView = getListView();
+				for (int position = 0; position < listView.getChildCount(); position++) {
+					LinearLayout layout = (LinearLayout) listView
+							.getChildAt(position);
+					CheckBox checkBox = (CheckBox) layout.getChildAt(0);
+					if (checkBox.isChecked()) {
+						selectedUserList.add(currentUserList.get(position));
+					}
+				}
+				long[] userIdArray=new long[selectedUserList.size()];
+				for (int i=0;i<userIdArray.length;i++) {
+					userIdArray[i]=selectedUserList.get(i).getUserId();
+				}
+				Bundle bundle=new Bundle();
+				bundle.putLongArray(getPackageName(),userIdArray);
+				Intent result=getIntent();
+				result.putExtra(getPackageName(),bundle);
+				setResult(Activity.RESULT_OK,result);
+				finish();
+				
+			}
+		});
 	}
 	
 	@Override
@@ -78,11 +107,7 @@ public class SelectTripUsersActivity extends ListActivity   {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		ListView listView = getListView();
-		for (int position=0;position<listView.getChildCount();position++) {
-		  LinearLayout v=(LinearLayout)listView.getChildAt(position);
-		  System.out.println("v="+v.getChildAt(2));
-		}
+		
 	}
 
 	
