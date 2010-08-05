@@ -1,0 +1,5 @@
+1. user±í
+create table user (userId integer primary key autocrement, name text not null, email text);
+
+2. trip±í
+create table trip (tripId integer primary key autocrement, name text not null); 

@@ -4,6 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 public class Trip {
+	private long tripId;
+	public long getTripId() {
+		return tripId;
+	}
+	public void setTripId(long tripId) {
+		this.tripId = tripId;
+	}
 	private String name;
 	private Date time;
 	private Integer totalAmount;

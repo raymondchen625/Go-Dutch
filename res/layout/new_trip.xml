@@ -13,7 +13,7 @@
   	<TextView android:text="@string/selectedUsers" android:id="@+id/selectedUserLableTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</TableRow>
 	<TableRow>
-	<TextView android:text="UserA, UserB" android:id="@+id/selectedUserListTextView" android:gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<TextView android:text="" android:id="@+id/selectedUserListTextView" android:gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</TableRow>
 	<TableRow android:stretchColumns="">
 	<Button android:text="@string/add" android:id="@+id/addTripButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
