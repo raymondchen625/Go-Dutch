@@ -3,31 +3,35 @@ package com.raymondchen.godutch.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.raymondchen.godutch.DefaultSetting;
-import com.raymondchen.godutch.User;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
-public class UserDbAdapter {
-	private static final String DATABASE_TABLE = "user";
-	private static final int DATABASE_VERSION = 1;
+import com.raymondchen.godutch.DataService;
+import com.raymondchen.godutch.DefaultSetting;
+import com.raymondchen.godutch.Trip;
+import com.raymondchen.godutch.User;
+
+
+public class TripDbAdapter {
+	private static final String DATABASE_TABLE = "trip";
+	private static final int DATABASE_VERSION = 2;
 	// The index (key) column name for use in where clauses.
-	public static final String KEY_ID = "userId";
+	public static final String KEY_ID = "tripId";
 	// 定义各个其它字段以及它们的序号
 	public static final String KEY_NAME = "name";
 	public static final int NAME_COLUMN = 1;
-	public static final String KEY_EMAIL = "email";
-	public static final int EMAIL_COLUMN = 2;
+	public static final String KEY_MEMBER_IDS="memberIds";
+	public static final int MEMBER_IDS_COLUMN=2;
+
 	// 建表语句
 	private static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_NAME
-			+ " text not null, " + KEY_EMAIL + " text);";
+			+ " text not null, "+KEY_MEMBER_IDS + " text);";
 	// Variable to hold the database instance
 	private SQLiteDatabase db;
 	// Context of the application using the database.
@@ -35,13 +39,13 @@ public class UserDbAdapter {
 	// Database open/upgrade helper
 	private myDbHelper dbHelper;
 
-	public UserDbAdapter(Context _context) {
+	public TripDbAdapter(Context _context) {
 		context = _context;
 		dbHelper = new myDbHelper(context, DefaultSetting.DATABASE_NAME, null,
 				DATABASE_VERSION);
 	}
 
-	public UserDbAdapter open() {
+	public TripDbAdapter open() {
 		db = dbHelper.getWritableDatabase();
 		return this;
 	}
@@ -50,39 +54,40 @@ public class UserDbAdapter {
 		db.close();
 	}
 
-	public long insertEntry(User user) {
-		if (user==null) {
+	public long insertEntry(Trip trip) {
+		if (trip==null) {
 			throw new IllegalArgumentException("user argument must not be null");
 		}
 		open();
 		ContentValues newValues=new ContentValues();
-		newValues.put(KEY_NAME, user.getName());
-		newValues.put(KEY_EMAIL, user.getEmail());
+		newValues.put(KEY_NAME, trip.getName());
+		newValues.put(KEY_MEMBER_IDS, trip.getMemberIds());
 		Long index=db.insert(DATABASE_TABLE, null, newValues);
 		close();
 		return index;
 	}
 
-	public boolean removeEntry(long userId) {
+	public boolean removeEntry(long tripId) {
 		open();
-		boolean result=db.delete(DATABASE_TABLE, KEY_ID + "=" + userId, null) > 0;
+		boolean result=db.delete(DATABASE_TABLE, KEY_ID + "=" + tripId, null) > 0;
 		close();
 		return result;
 	}
 
-	public List<User> getAllEntries() {
+	public List<Trip> getAllEntries() {
 		System.out.println("db="+db);
 		open();
-		Cursor cursor= db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_NAME,KEY_EMAIL },
+		Cursor cursor= db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_MEMBER_IDS },
 				null, null, null, null, null);
-		List<User> list=new ArrayList<User>();
+		List<Trip> list=new ArrayList<Trip>();
 		if (cursor.moveToFirst()) {
 			do {
-				User user=new User();
-				user.setEmail(cursor.getString(EMAIL_COLUMN));
-				user.setName(cursor.getString(NAME_COLUMN));
-				user.setUserId(cursor.getLong(0));
-				list.add(user);
+				Trip trip=new Trip();
+				trip.setName(cursor.getString(NAME_COLUMN));
+				trip.setTripId(cursor.getLong(0));
+				String memberIdList=cursor.getString(MEMBER_IDS_COLUMN);
+				fillTripMembers(memberIdList, trip);
+				list.add(trip);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -90,31 +95,34 @@ public class UserDbAdapter {
 		return list;
 	}
 
-	public User getEntry(long userId) {
+	public Trip getEntry(long tripId) {
 		open();
-		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME,KEY_EMAIL}, KEY_ID+" = ?", new String[]{userId+""}, null, null, null);
+		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME}, KEY_ID+" = ?", new String[]{tripId+""}, null, null, null);
 		if (cursor.getCount()==0) {
 			return null;
 		}
 		cursor.moveToFirst();
-		User user=new User();
-		user.setEmail(cursor.getString(EMAIL_COLUMN));
-		user.setName(cursor.getString(NAME_COLUMN));
-		user.setUserId(cursor.getLong(0));
+		Trip trip=new Trip();
+		trip.setName(cursor.getString(NAME_COLUMN));
+		trip.setTripId(cursor.getLong(0));
+		String memberIdList=cursor.getString(MEMBER_IDS_COLUMN);
+		fillTripMembers(memberIdList, trip);
 		cursor.close();
 		close();
-		return user;
+		return trip;
 	}
 
-	public boolean updateEntry(User user) {
-		if (user==null) {
-			throw new IllegalArgumentException("user argument must not be null");
+	public boolean updateEntry(Trip trip) {
+		if (trip==null) {
+			throw new IllegalArgumentException("trip argument must not be null");
 		}
+		open();
 		ContentValues updatedValues=new ContentValues();
-		updatedValues.put(KEY_NAME, user.getName());
-		updatedValues.put(KEY_EMAIL, user.getEmail());
-		String where="userId=?";
-		db.update(DATABASE_TABLE, updatedValues, where, new String[]{user.getUserId()+""});
+		updatedValues.put(KEY_NAME, trip.getName());
+		updatedValues.put(KEY_MEMBER_IDS, trip.getMemberIds());
+		String where="tripId = ?";
+		db.update(DATABASE_TABLE, updatedValues, where, new String[]{trip.getTripId()+""});
+		close();
 		return true;
 	}
 
@@ -150,5 +158,20 @@ public class UserDbAdapter {
 			// Create a new one.
 			onCreate(_db);
 		}
+}
+	private void fillTripMembers(String memberIdList, Trip trip) {
+		if (memberIdList==null) {
+			memberIdList="";
+		}
+		System.out.println("memberIdList="+memberIdList);
+		List<User> memberList=new ArrayList<User>();
+		String[] idList=memberIdList.split(",");
+		for (String id : idList) {
+			User user=DataService.getUserById(context, new Long(id));
+			if (user!=null) {
+				memberList.add(user);
+			}
+		}
+		trip.setMembers(memberList);
 	}
 }

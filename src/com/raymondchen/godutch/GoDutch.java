@@ -70,7 +70,6 @@ public class GoDutch extends ListActivity {
 	private MenuItem settingItem;
 	private MenuItem userManagementItem;
 	List<Trip> activityList;
-	List<User> userList;
 	List<String> screenElementList;
 
 	/** Called when the activity is first created. */
@@ -78,7 +77,6 @@ public class GoDutch extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		loadUserList();
 		loadActivityList();
 		initializeScreenElements();
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main,
@@ -103,39 +101,7 @@ public class GoDutch extends ListActivity {
 	 * 从存储（数据库）中加载和刷新活动列表
 	 */
 	private void loadActivityList() {
-		activityList = new ArrayList<Trip>();
-		Trip activity = new Trip();
-		activity.setName("爬白云山");
-		activityList.add(activity);
-		activity = new Trip();
-		activity.setName("游泳");
-		activityList.add(activity);
-		activity = new Trip();
-		activity.setName("去海洋馆旁边的猴山看有没有走失的狒狒");
-		activityList.add(activity);
-		activity = new Trip();
-		activity.setName("Last activity is always about food");
-		activityList.add(activity);
-
-	}
-
-	private void loadUserList() {
-		userList = new ArrayList<User>();
-		User user = new User();
-		user.setEmail("raymond@126.com");
-		user.setName("Raymond126");
-		user.setUserId(1L);
-		userList.add(user);
-		user = new User();
-		user.setEmail("raymond@raymondchen.com");
-		user.setName("Raymond Chen");
-		user.setUserId(2L);
-		userList.add(user);
-		user = new User();
-		user.setEmail("raymondchen625@gmail.com");
-		user.setName("Raymond Chen 625");
-		user.setUserId(3L);
-		userList.add(user);
+		activityList = DataService.getAllTripList(getApplicationContext());
 	}
 
 	private void initializeScreenElements() {

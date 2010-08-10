@@ -4,6 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 public class Trip {
+	private long tripId;
+	public long getTripId() {
+		return tripId;
+	}
+	public void setTripId(long tripId) {
+		this.tripId = tripId;
+	}
 	private String name;
 	private Date time;
 	private Integer totalAmount;
@@ -31,5 +38,18 @@ public class Trip {
 	}
 	public void setMembers(List<User> members) {
 		this.members = members;
+	}
+	public String getMemberIds() {
+		if (members==null || members.size()==0) {
+			return "";
+		}
+		String idListStr="";
+		for (int i=0;i<members.size();i++) {
+			idListStr+=members.get(i).getUserId();
+			if (i!=members.size()-1) {
+				idListStr+=",";
+			}
+		}
+		return idListStr;
 	}
 }
