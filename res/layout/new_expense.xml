@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+<TextView android:text="@string/expenseName" android:id="@+id/expenseNameTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TextView android:id="@+id/expenseAmountTextView" android:layout_below="@+id/expenseNameTextView" android:text="@string/expenseAmount" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+
+<EditText android:layout_toRightOf="@+id/expenseNameTextView" android:id="@+id/expenseNameEditText" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+
+<EditText android:layout_toRightOf="@+id/expenseAmountTextView" android:id="@+id/expenseAmountEditText" android:text="@+id/EditText02" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+</RelativeLayout>

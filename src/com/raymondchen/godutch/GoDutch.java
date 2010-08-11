@@ -69,7 +69,7 @@ public class GoDutch extends ListActivity {
 	private MenuItem aboutItem;
 	private MenuItem settingItem;
 	private MenuItem userManagementItem;
-	List<Trip> activityList;
+	List<Trip> tripList;
 	List<String> screenElementList;
 
 	/** Called when the activity is first created. */
@@ -85,12 +85,20 @@ public class GoDutch extends ListActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if (position>0 && position<screenElementList.size()-2) {
+					Intent intent=new Intent();
+					Trip trip=tripList.get(position-1);
+					Toast.makeText(getApplicationContext(),
+							 "tripId - " + trip.getTripId(),
+							Toast.LENGTH_SHORT).show();
+				} else {
 				// When clicked, show a toast with the TextView text
 				Toast.makeText(getApplicationContext(),
 						((TextView) view).getText() + "-" + position,
 						Toast.LENGTH_SHORT).show();
 				if (position==0) {
 					startActivity(new Intent(getApplicationContext(),NewTripActivity.class));
+				}
 				}
 			}
 		});
@@ -101,19 +109,16 @@ public class GoDutch extends ListActivity {
 	 * 从存储（数据库）中加载和刷新活动列表
 	 */
 	private void loadActivityList() {
-		activityList = DataService.getAllTripList(getApplicationContext());
+		tripList = DataService.getAllTripList(getApplicationContext());
 	}
 
 	private void initializeScreenElements() {
 		screenElementList = new ArrayList<String>();
 		screenElementList.add(getResources().getString(R.string.newTrip));
 		// 加入最近三项活动列表（不足三项加入空标签），一个“全部活动”标签，最后加入一个“快速添加帐务”
-		for (int i = 0; i < DefaultSetting.ACTIVITIES_NUMBER_ON_MAIN_SCREEN; i++) {
-			if (activityList.size() > i) {
-				screenElementList.add(activityList.get(i).getName());
-			} else {
-				screenElementList.add("");
-			}
+		for (int i = 0; i < tripList.size(); i++) {
+				screenElementList.add(tripList.get(i).getName());
+
 		}
 		screenElementList.add("... 全部活动");
 		screenElementList.add("快速添加帐务");

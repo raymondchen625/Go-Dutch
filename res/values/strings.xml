@@ -30,4 +30,7 @@
 <string name="selectUsersPlease">请选择用户</string>
 <string name="specifyTripNamePlease">请输入活动名称</string>
 <string name="addTripSucceeded">活动已成功添加</string>
+<string name="expenseName">支出项目名</string>
+<string name="expenseAmount">金额</string>
+<string name="newExpense">新增支出项目</string>
 </resources>
