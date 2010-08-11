@@ -7,7 +7,7 @@ import java.util.Date;
 public final class Util {
 	/**
 	 * 
-	 * @param dateString 第二个参数为格式字符串，不存在时为默认格式: yyyyMMdd HH:mm:ss ; 第一个参数为日期字符串。参数传null或者空串返回当前时间
+	 * @param dateString 第二个参数为格式字符串，不存在时为默认格式: yyyy-MM-dd HH:mm:ss ; 第一个参数为日期字符串。参数传null或者空串返回当前时间
 	 * @return
 	 */
 	public static Date getDateFromString(String ... dateString) throws ParseException {

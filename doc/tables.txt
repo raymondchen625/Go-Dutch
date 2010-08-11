@@ -2,4 +2,9 @@
 create table user (userId integer primary key autocrement, name text not null, email text);
 
 2. trip±í
-create table trip (tripId integer primary key autocrement, name text not null); 
+create table trip (tripId integer primary key autocrement, name text not null, memberIds text); 
+
+3. expense±í
+create table expense (expenseId integer primary key autocrement,
+ tripId integer, name text not null,
+  amount real, sharedUserIds text, time text default datetime('now'));
