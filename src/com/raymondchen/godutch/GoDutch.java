@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.raymondchen.godutch.activity.AboutActivity;
+import com.raymondchen.godutch.activity.NewExpenseActivity;
 import com.raymondchen.godutch.activity.NewTripActivity;
 import com.raymondchen.godutch.activity.SettingsActivity;
 import com.raymondchen.godutch.activity.UserManagementActivity;
@@ -86,11 +87,13 @@ public class GoDutch extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if (position>0 && position<screenElementList.size()-2) {
-					Intent intent=new Intent();
 					Trip trip=tripList.get(position-1);
 					Toast.makeText(getApplicationContext(),
 							 "tripId - " + trip.getTripId(),
 							Toast.LENGTH_SHORT).show();
+					Intent intent=new Intent(getApplicationContext(),NewExpenseActivity.class);
+					intent.putExtra("tripId", trip.getTripId());
+					startActivity(intent);
 				} else {
 				// When clicked, show a toast with the TextView text
 				Toast.makeText(getApplicationContext(),

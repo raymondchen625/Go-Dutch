@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class UserDbAdapter {
 	private static final String DATABASE_TABLE = "user";
-	private static final int DATABASE_VERSION = 1;
+	public static final int TABLE_VERSION=16;
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "userId";
 	// 定义各个其它字段以及它们的序号
@@ -38,7 +38,7 @@ public class UserDbAdapter {
 	public UserDbAdapter(Context _context) {
 		context = _context;
 		dbHelper = new myDbHelper(context, DefaultSetting.DATABASE_NAME, null,
-				DATABASE_VERSION);
+				TABLE_VERSION);
 	}
 
 	public UserDbAdapter open() {
@@ -139,7 +139,7 @@ public class UserDbAdapter {
 				int _newVersion) {
 			// Log the version upgrade.
 			System.out.println("Upgrading from version " + _oldVersion + " to "
-					+ _newVersion + ", which will destroy all old data");
+					+ _newVersion + ", which will destroy all old data of table: "+DATABASE_TABLE);
 			// Upgrade the existing database to conform to the new version.
 			// Multiple
 			// previous versions can be handled by comparing _oldVersion and

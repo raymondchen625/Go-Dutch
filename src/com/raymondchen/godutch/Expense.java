@@ -8,6 +8,13 @@ public class Expense {
 	private String name;
 	private double amount;
 	private String sharedUserIds;
+	private long paidUserId;
+	public long getPaidUserId() {
+		return paidUserId;
+	}
+	public void setPaidUserId(long paidUserId) {
+		this.paidUserId = paidUserId;
+	}
 	private Date time;
 	public long getExpenseId() {
 		return expenseId;

@@ -18,7 +18,7 @@ import com.raymondchen.godutch.User;
 
 public class TripDbAdapter {
 	private static final String DATABASE_TABLE = "trip";
-	private static final int DATABASE_VERSION = 2;
+	public static final int TABLE_VERSION=16;
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "tripId";
 	// 定义各个其它字段以及它们的序号
@@ -26,6 +26,7 @@ public class TripDbAdapter {
 	public static final int NAME_COLUMN = 1;
 	public static final String KEY_MEMBER_IDS="memberIds";
 	public static final int MEMBER_IDS_COLUMN=2;
+	
 
 	// 建表语句
 	private static final String DATABASE_CREATE = "create table "
@@ -42,7 +43,7 @@ public class TripDbAdapter {
 	public TripDbAdapter(Context _context) {
 		context = _context;
 		dbHelper = new myDbHelper(context, DefaultSetting.DATABASE_NAME, null,
-				DATABASE_VERSION);
+				TABLE_VERSION);
 	}
 
 	public TripDbAdapter open() {
@@ -97,7 +98,7 @@ public class TripDbAdapter {
 
 	public Trip getEntry(long tripId) {
 		open();
-		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME}, KEY_ID+" = ?", new String[]{tripId+""}, null, null, null);
+		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME, KEY_MEMBER_IDS}, KEY_ID+" = ?", new String[]{tripId+""}, null, null, null);
 		if (cursor.getCount()==0) {
 			return null;
 		}
@@ -147,7 +148,7 @@ public class TripDbAdapter {
 				int _newVersion) {
 			// Log the version upgrade.
 			System.out.println("Upgrading from version " + _oldVersion + " to "
-					+ _newVersion + ", which will destroy all old data");
+					+ _newVersion + ", which will destroy all old data of table: "+DATABASE_TABLE);
 			// Upgrade the existing database to conform to the new version.
 			// Multiple
 			// previous versions can be handled by comparing _oldVersion and

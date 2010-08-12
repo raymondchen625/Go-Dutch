@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-<TextView android:text="@string/expenseName" android:id="@+id/expenseNameTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-<TextView android:id="@+id/expenseAmountTextView" android:layout_below="@+id/expenseNameTextView" android:text="@string/expenseAmount" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:orientation="horizontal" android:stretchColumns="1">
+	<TableRow>
+		<TextView android:text="@string/expenseName" android:id="@+id/expenseNameTextView"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
-<EditText android:layout_toRightOf="@+id/expenseNameTextView" android:id="@+id/expenseNameEditText" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+		<EditText android:id="@+id/expenseNameEditText" android:text=""
+			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+	</TableRow>
+	<TableRow>
+		<TextView android:id="@+id/expenseAmountTextView"
+			android:layout_alignParentLeft="true" android:text="@string/expenseAmount"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
-<EditText android:layout_toRightOf="@+id/expenseAmountTextView" android:id="@+id/expenseAmountEditText" android:text="@+id/EditText02" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
-</RelativeLayout>
+		<EditText android:id="@+id/expenseAmountEditText"
+			android:text="" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"></EditText>
+	</TableRow>
+	<TableRow>
+	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+	</TableRow>
+	<TableRow>
+	<TextView android:id="@+id/paidUserTextView" android:text="@string/paidUser" />
+	<RadioGroup android:id="@+id/paidUserRadioGroup" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioGroup>
+	</TableRow>
+	<TableRow>
+<Button android:text="@string/add" android:id="@+id/expenseSubmitButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>	
+	</TableRow>
+
+
+</TableLayout>
