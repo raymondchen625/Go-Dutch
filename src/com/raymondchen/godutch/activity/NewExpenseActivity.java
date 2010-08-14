@@ -31,6 +31,7 @@ public class NewExpenseActivity extends Activity {
 
 	private Button expenseSubmitButton;
 	private Button listExpenseButton;
+	private Button runReportButton;
 	private EditText expenseNameEditText;
 	private EditText expenseAmountEditText;
 	private RadioGroup paidUserRadioGroup;
@@ -45,10 +46,7 @@ public class NewExpenseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		long tripId=getIntent().getExtras().getLong("tripId");
-		System.out.println("tripId="+tripId);
 		trip=DataService.getTripById(getApplicationContext(), tripId);
-		System.out.println("trip="+trip);
-		expenseList=DataService.getExpenseListByTripId(getApplicationContext(), tripId);
 		userList=trip.getMembers();
 		setContentView(R.layout.new_expense);
 		expenseSubmitButton=(Button)findViewById(R.id.expenseSubmitButton);
@@ -56,6 +54,9 @@ public class NewExpenseActivity extends Activity {
 		listExpenseButton=(Button)findViewById(R.id.listExpenseButton);
 		expenseAmountEditText=(EditText)findViewById(R.id.expenseAmountEditText);
 		paidUserRadioGroup=(RadioGroup)findViewById(R.id.paidUserRadioGroup);
+		runReportButton=(Button)findViewById(R.id.runReportButton);
+		
+		refreshExpenseList();
 		for (User user : userList) {
 			RadioButton radioButton=new RadioButton(getApplicationContext());
 			radioButton.setText(user.getName());
@@ -65,34 +66,35 @@ public class NewExpenseActivity extends Activity {
 			public void onClick(View v) {
 				String validateResult=validateInput();
 				if (validateResult.equals("")) {
+					System.out.println("checkedRadioButtonId="+paidUserRadioGroup.getCheckedRadioButtonId());
 					Expense expense=new Expense();
 					expense.setName(expenseName);
 					expense.setAmount(expenseAmount);
 					expense.setSharedUserIds(trip.getMemberIds());
 					expense.setTripId(trip.getTripId());
+					expense.setPaidUserId(getCheckedPaidUser().getUserId());
 					DataService.addExpense(getApplicationContext(), expense);
 					Toast.makeText(getApplicationContext(), getResources().getString(R.string.addExpenseSucceeded), Toast.LENGTH_SHORT).show();
 					expenseNameEditText.setText("");
 					expenseAmountEditText.setText("");
+					refreshExpenseList();
 				} else {
 					Toast.makeText(getApplicationContext(), validateResult, Toast.LENGTH_SHORT).show();
 				}
 				
 			}
 		});
-		
-
 		listExpenseButton.setOnClickListener(new OnClickListener() {
-
 			public void onClick(View view) {
 				listExpenseButton.performLongClick();
-				
+			}
+		});
+		runReportButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				runReport();
 			}
 			
 		});
-		
-		registerForContextMenu(listExpenseButton);
-		
 	}
 	
 	
@@ -103,9 +105,12 @@ public class NewExpenseActivity extends Activity {
 		System.out.println();
 		int i=0;
 		for (Expense expense : expenseList) {
-			contextMenu.add(0,i++,0,expense.getName() + " ("+expense.getAmount()+")");
+			User paidUser=DataService.getUserById(getApplicationContext(), expense.getPaidUserId());
+			contextMenu.add(0,i++,0,expense.getName() + " ("+expense.getAmount()+") - paid by "+ paidUser.getName());
 		}
 	}
+	
+	
 
 
 	private String validateInput() {
@@ -123,7 +128,66 @@ public class NewExpenseActivity extends Activity {
 		} catch (NumberFormatException e) {
 			result +=" "+getResources().getString(R.string.specifyExpenseAmount);
 		}
+		if (paidUserRadioGroup.getCheckedRadioButtonId()<0) {
+			result+=" " +getResources().getString(R.string.specifyPaidUserPlease);
+		}
 		return result;
+	}
+	
+	private void refreshExpenseList() {
+		expenseList=DataService.getExpenseListByTripId(getApplicationContext(), this.trip.getTripId());
+		registerForContextMenu(listExpenseButton);
+	}
+	
+	private User getCheckedPaidUser() {
+		for (int i=0;i<paidUserRadioGroup.getChildCount();i++) {
+			RadioButton rb=(RadioButton)paidUserRadioGroup.getChildAt(i);
+			if (rb.isChecked()) {
+				return userList.get(i);
+			}
+		}
+		return null;
+	}
+	
+	private void runReport() {
+		int headCount=userList.size();
+		double[] alreadyPaidAmount=new double[headCount];
+		String[] result=new String[headCount];
+		double totalAmount=0;
+		for (Expense expense : expenseList) {
+			totalAmount+=expense.getAmount();
+			alreadyPaidAmount[getUserListPositionByUserId(expense.getPaidUserId())]+=expense.getAmount();
+		}
+		if (totalAmount==0d) {
+			Toast.makeText(getApplicationContext(), "Nothing paid", Toast.LENGTH_SHORT).show();
+			return ;
+		}
+		double average=Math.round((totalAmount/headCount)*100)/100;
+		System.out.println("average="+average);
+		for (int i=0;i<headCount;i++) {
+			String paidStr=userList.get(i).getName() + " : ";
+			if (i<headCount-1) {
+				paidStr+=alreadyPaidAmount[i]-average;
+			} else {
+				paidStr+=alreadyPaidAmount[i]-(totalAmount-average*(headCount-1));
+			}
+			result[i]=paidStr;
+		}
+		String finalReportString="";
+		for (String s : result) {
+			finalReportString+=s;
+			finalReportString+="\n";
+		}
+		Toast.makeText(getApplicationContext(), finalReportString, Toast.LENGTH_LONG).show();
+	}
+	
+	private int getUserListPositionByUserId(long userId) {
+		for (int i=0;i<userList.size();i++) {
+			if (userList.get(i).getUserId()==userId) {
+				return i;
+			}
+		}
+		throw new IllegalArgumentException("Invalid value of userId="+userId);
 	}
 
 }

@@ -37,7 +37,9 @@
 <string name="specifyExpenseNamePlease">请输入支付项目名称</string>
 <string name="specifyExpenseAmount">请输入支付金额</string>
 <string name="zeroAmountIllegal">支付金额不能为零</string>
+<string name="specifyPaidUserPlease">请指定支付人</string>
 <string name="addExpenseSucceeded">支付项目已成功添加</string>
 <string name="paidUser">付款人</string>
 <string name="listExpense">查看已支付列表</string>
+<string name="runReport">算账</string>
 </resources>

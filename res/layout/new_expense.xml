@@ -28,6 +28,7 @@
 	<TableRow>
 <Button android:text="@string/add" android:id="@+id/expenseSubmitButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>	
 <Button android:id="@+id/listExpenseButton" android:text="@string/listExpense" android:layout_width="wrap_content"></Button>
+<Button android:id="@+id/runReportButton" android:text="@string/runReport" />
 	</TableRow>
 
 

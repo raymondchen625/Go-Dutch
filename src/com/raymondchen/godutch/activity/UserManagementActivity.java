@@ -29,6 +29,14 @@ public class UserManagementActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		userList = DataService.loadUserList(getApplicationContext());
 		initializeScreenElements();
+	}
+	
+	private void initializeScreenElements() {
+		screenElementList = new ArrayList<String>();
+		screenElementList.add(getResources().getString(R.string.newUser));
+		for (int i = 0; i < userList.size(); i++) {
+				screenElementList.add(userList.get(i).getName() + " ("+userList.get(i).getEmail()+")");
+		}
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main,
 				screenElementList));
 		ListView listView = getListView();
@@ -41,15 +49,6 @@ public class UserManagementActivity extends ListActivity {
 				}
 			}
 		});
-
-	}
-	
-	private void initializeScreenElements() {
-		screenElementList = new ArrayList<String>();
-		screenElementList.add(getResources().getString(R.string.newUser));
-		for (int i = 0; i < userList.size(); i++) {
-				screenElementList.add(userList.get(i).getName() + " ("+userList.get(i).getEmail()+")");
-		}
 	}
 
 	@Override
@@ -57,5 +56,6 @@ public class UserManagementActivity extends ListActivity {
 		super.onResume();
 		userList = DataService.loadUserList(getApplicationContext());
 		initializeScreenElements();
+		
 	}
 }

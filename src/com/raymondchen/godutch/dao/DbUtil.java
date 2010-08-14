@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbUtil {
 	
-	public static final int CURRENT_DATABASE_VERSION=7;
+	public static final int CURRENT_DATABASE_VERSION=1;
 	public static final String DATABASE_NAME="godutch.db";
 	
 	public static void checkDbSchemaVersion(Context context) {
@@ -47,7 +47,6 @@ public class DbUtil {
 		oldVersion++;
 		switch (oldVersion) {
 			case 2:
-				
 				break;
 			case 3:
 				break;

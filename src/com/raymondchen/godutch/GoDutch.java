@@ -81,6 +81,26 @@ public class GoDutch extends ListActivity {
 		DbUtil.checkDbSchemaVersion(getApplicationContext());
 		loadActivityList();
 		initializeScreenElements();
+		
+
+	}
+
+	/**
+	 * 从存储（数据库）中加载和刷新活动列表
+	 */
+	private void loadActivityList() {
+		tripList = DataService.getAllTripList(getApplicationContext());
+	}
+
+	private void initializeScreenElements() {
+		screenElementList = new ArrayList<String>();
+		screenElementList.add(getResources().getString(R.string.newTrip));
+		// 加入最近三项活动列表（不足三项加入空标签），一个“全部活动”标签，最后加入一个“快速添加帐务”
+		for (int i = 0; i < tripList.size(); i++) {
+				screenElementList.add(tripList.get(i).getName());
+
+		}
+		screenElementList.add("快速添加帐务");
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main,
 				screenElementList));
 		ListView listView = getListView();
@@ -106,26 +126,12 @@ public class GoDutch extends ListActivity {
 				}
 			}
 		});
-
 	}
 
-	/**
-	 * 从存储（数据库）中加载和刷新活动列表
-	 */
-	private void loadActivityList() {
-		tripList = DataService.getAllTripList(getApplicationContext());
-	}
-
-	private void initializeScreenElements() {
-		screenElementList = new ArrayList<String>();
-		screenElementList.add(getResources().getString(R.string.newTrip));
-		// 加入最近三项活动列表（不足三项加入空标签），一个“全部活动”标签，最后加入一个“快速添加帐务”
-		for (int i = 0; i < tripList.size(); i++) {
-				screenElementList.add(tripList.get(i).getName());
-
-		}
-		screenElementList.add("... 全部活动");
-		screenElementList.add("快速添加帐务");
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initializeScreenElements();
 	}
 
 }
