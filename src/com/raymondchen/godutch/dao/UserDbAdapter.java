@@ -3,7 +3,6 @@ package com.raymondchen.godutch.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.raymondchen.godutch.DefaultSetting;
 import com.raymondchen.godutch.User;
 
 import android.content.ContentValues;
@@ -15,7 +14,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class UserDbAdapter {
 	private static final String DATABASE_TABLE = "user";
-	public static final int TABLE_VERSION=16;
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "userId";
 	// 定义各个其它字段以及它们的序号
@@ -24,7 +22,7 @@ public class UserDbAdapter {
 	public static final String KEY_EMAIL = "email";
 	public static final int EMAIL_COLUMN = 2;
 	// 建表语句
-	private static final String DATABASE_CREATE = "create table "
+	public static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_NAME
 			+ " text not null, " + KEY_EMAIL + " text);";
@@ -37,8 +35,8 @@ public class UserDbAdapter {
 
 	public UserDbAdapter(Context _context) {
 		context = _context;
-		dbHelper = new myDbHelper(context, DefaultSetting.DATABASE_NAME, null,
-				TABLE_VERSION);
+		dbHelper = new myDbHelper(context, DbUtil.DATABASE_NAME, null,
+				DbUtil.CURRENT_DATABASE_VERSION);
 	}
 
 	public UserDbAdapter open() {
@@ -128,7 +126,7 @@ public class UserDbAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			_db.execSQL(DATABASE_CREATE);
+			System.out.println("do nothing");
 		}
 
 		// Called when there is a database version mismatch meaning that the
@@ -137,18 +135,7 @@ public class UserDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
-			// Log the version upgrade.
-			System.out.println("Upgrading from version " + _oldVersion + " to "
-					+ _newVersion + ", which will destroy all old data of table: "+DATABASE_TABLE);
-			// Upgrade the existing database to conform to the new version.
-			// Multiple
-			// previous versions can be handled by comparing _oldVersion and
-			// _newVersion
-			// values.
-			// The simplest case is to drop the old table and create a new one.
-			_db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
-			// Create a new one.
-			onCreate(_db);
+			System.out.println("Per-table upgrade is disabled");
 		}
 	}
 }

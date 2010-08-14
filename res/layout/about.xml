@@ -3,7 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:orientation="vertical">
+  android:orientation="vertical" >
+<!--  android:layout_marginLeft="50sp" android:layout_marginRight="50sp"  android:layout_marginTop="50sp" android:layout_marginBottom="50sp" >-->
 <TextView android:text="@string/thankyou" android:id="@+id/TextViewThankYou" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"></TextView>
 <TextView android:text="@string/author" android:id="@+id/TextViewAuthor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 <TextView android:text="@string/authorName" android:id="@+id/TextViewAuthorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="15sp"></TextView>

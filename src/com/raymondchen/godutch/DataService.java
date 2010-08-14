@@ -43,4 +43,9 @@ public class DataService {
 		ExpenseDbAdapter adapter=new ExpenseDbAdapter(context);
 		adapter.insertEntry(expense);
 	}
+	
+	public static List<Expense> getExpenseListByTripId(Context context, long tripId) {
+		ExpenseDbAdapter adapter=new ExpenseDbAdapter(context);
+		return adapter.getExpenseListByTripId(tripId);
+	}
 }

@@ -13,13 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
-import com.raymondchen.godutch.DefaultSetting;
 import com.raymondchen.godutch.Expense;
 import com.raymondchen.godutch.Util;
 
 public class ExpenseDbAdapter {
 	private static final String DATABASE_TABLE = "expense";
-	public static final int TABLE_VERSION=15;
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "expenseId";
 	// 定义各个其它字段以及它们的序号
@@ -27,20 +25,23 @@ public class ExpenseDbAdapter {
 	public static final int TRIP_ID_COLUMN = 1;
 	public static final String KEY_NAME = "name";
 	public static final int NAME_COLUMN = 2;
-	public static final String KEY_AMOUNT="amount";
-	public static final int AMOUNT_COLUMN=3;
-	public static final String KEY_SHARED_USER_IDS="sharedUserIds";
-	public static final int SHARED_USER_IDS_COLUMN=4;
-	public static final String KEY_TIME="time";
-	public static final int TIME_COLUMN=5;
-	public static final String KEY_PAID_USER_ID="paidUserId";
-	public static final int PAID_USER_ID_COLUMN=6;
+	public static final String KEY_AMOUNT = "amount";
+	public static final int AMOUNT_COLUMN = 3;
+	public static final String KEY_SHARED_USER_IDS = "sharedUserIds";
+	public static final int SHARED_USER_IDS_COLUMN = 4;
+	public static final String KEY_TIME = "time";
+	public static final int TIME_COLUMN = 5;
+	public static final String KEY_PAID_USER_ID = "paidUserId";
+	public static final int PAID_USER_ID_COLUMN = 6;
 
 	// 建表语句
-	private static final String DATABASE_CREATE = "create table "
+	public static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
-			+ " integer primary key autoincrement, "  + KEY_TRIP_ID +" integer, "+ KEY_NAME
-			+ " text not null, " + KEY_AMOUNT + " real, "+ KEY_SHARED_USER_IDS + " text, "+ KEY_TIME + " text default (datetime('now')), "+KEY_PAID_USER_ID + " integer);";
+			+ " integer primary key autoincrement, " + KEY_TRIP_ID
+			+ " integer, " + KEY_NAME + " text not null, " + KEY_AMOUNT
+			+ " real, " + KEY_SHARED_USER_IDS + " text, " + KEY_TIME
+			+ " text default (datetime('now')), " + KEY_PAID_USER_ID
+			+ " integer);";
 	// Variable to hold the database instance
 	private SQLiteDatabase db;
 	// Context of the application using the database.
@@ -50,8 +51,8 @@ public class ExpenseDbAdapter {
 
 	public ExpenseDbAdapter(Context _context) {
 		context = _context;
-		dbHelper = new myDbHelper(context, DefaultSetting.DATABASE_NAME, null,
-				TABLE_VERSION);
+		dbHelper = new myDbHelper(context, DbUtil.DATABASE_NAME, null,
+				DbUtil.CURRENT_DATABASE_VERSION);
 	}
 
 	public ExpenseDbAdapter open() {
@@ -67,13 +68,13 @@ public class ExpenseDbAdapter {
 		if (expense == null) {
 			throw new IllegalArgumentException("user argument must not be null");
 		}
-	open();
+		open();
 		ContentValues newValues = new ContentValues();
 		newValues.put(KEY_TRIP_ID, expense.getTripId());
 		newValues.put(KEY_NAME, expense.getName());
 		newValues.put(KEY_AMOUNT, expense.getAmount());
 		newValues.put(KEY_SHARED_USER_IDS, expense.getSharedUserIds());
-		newValues.put(KEY_PAID_USER_ID,expense.getPaidUserId());
+		newValues.put(KEY_PAID_USER_ID, expense.getPaidUserId());
 		Long index = db.insert(DATABASE_TABLE, null, newValues);
 		close();
 		return index;
@@ -81,15 +82,17 @@ public class ExpenseDbAdapter {
 
 	public boolean removeEntry(long expenseId) {
 		open();
-		boolean result = db.delete(DATABASE_TABLE, KEY_ID + "=" + expenseId, null) > 0;
+		boolean result = db.delete(DATABASE_TABLE, KEY_ID + "=" + expenseId,
+				null) > 0;
 		close();
 		return result;
 	}
 
 	public List<Expense> getAllEntries() {
 		open();
-		Cursor cursor = db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_TRIP_ID,
-				KEY_NAME, KEY_AMOUNT, KEY_SHARED_USER_IDS, KEY_TIME,KEY_PAID_USER_ID }, null, null, null, null, null);
+		Cursor cursor = db.query(DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TRIP_ID, KEY_NAME, KEY_AMOUNT, KEY_SHARED_USER_IDS,
+				KEY_TIME, KEY_PAID_USER_ID }, null, null, null, null, null);
 		List<Expense> list = new ArrayList<Expense>();
 		if (cursor.moveToFirst()) {
 			do {
@@ -98,10 +101,43 @@ public class ExpenseDbAdapter {
 				expense.setTripId(cursor.getLong(TRIP_ID_COLUMN));
 				expense.setName(cursor.getString(NAME_COLUMN));
 				expense.setAmount(cursor.getDouble(AMOUNT_COLUMN));
-				expense.setSharedUserIds(cursor.getString(SHARED_USER_IDS_COLUMN));
+				expense.setSharedUserIds(cursor
+						.getString(SHARED_USER_IDS_COLUMN));
 				expense.setPaidUserId(cursor.getLong(PAID_USER_ID_COLUMN));
 				try {
-					expense.setTime(Util.getDateFromString(cursor.getString(TIME_COLUMN)));
+					expense.setTime(Util.getDateFromString(cursor
+							.getString(TIME_COLUMN)));
+				} catch (ParseException e) {
+					expense.setTime(new Date()); // 出错时设置为现在
+				}
+				list.add(expense);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		close();
+		return list;
+	}
+
+	public List<Expense> getExpenseListByTripId(long tripId) {
+		open();
+		Cursor cursor = db.query(DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TRIP_ID, KEY_NAME, KEY_AMOUNT, KEY_SHARED_USER_IDS,
+				KEY_TIME, KEY_PAID_USER_ID }, KEY_TRIP_ID + " = ?",
+				new String[] { tripId + "" }, null, null, null);
+		List<Expense> list = new ArrayList<Expense>();
+		if (cursor.moveToFirst()) {
+			do {
+				Expense expense = new Expense();
+				expense.setExpenseId(cursor.getLong(0));
+				expense.setTripId(cursor.getLong(TRIP_ID_COLUMN));
+				expense.setName(cursor.getString(NAME_COLUMN));
+				expense.setAmount(cursor.getDouble(AMOUNT_COLUMN));
+				expense.setSharedUserIds(cursor
+						.getString(SHARED_USER_IDS_COLUMN));
+				expense.setPaidUserId(cursor.getLong(PAID_USER_ID_COLUMN));
+				try {
+					expense.setTime(Util.getDateFromString(cursor
+							.getString(TIME_COLUMN)));
 				} catch (ParseException e) {
 					expense.setTime(new Date()); // 出错时设置为现在
 				}
@@ -115,10 +151,13 @@ public class ExpenseDbAdapter {
 
 	public Expense getEntry(long expenseId) {
 		open();
-		Cursor cursor = db.query(DATABASE_TABLE, new String[] {KEY_ID, KEY_TRIP_ID,
-				KEY_NAME, KEY_AMOUNT, KEY_SHARED_USER_IDS, KEY_TIME, KEY_PAID_USER_ID }, KEY_ID + " = ?", new String[] { expenseId + "" },
-				null, null, null);
+		Cursor cursor = db.query(DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TRIP_ID, KEY_NAME, KEY_AMOUNT, KEY_SHARED_USER_IDS,
+				KEY_TIME, KEY_PAID_USER_ID }, KEY_ID + " = ?",
+				new String[] { expenseId + "" }, null, null, null);
 		if (cursor.getCount() == 0) {
+			cursor.close();
+			close();
 			return null;
 		}
 		cursor.moveToFirst();
@@ -130,7 +169,8 @@ public class ExpenseDbAdapter {
 		expense.setSharedUserIds(cursor.getString(SHARED_USER_IDS_COLUMN));
 		expense.setPaidUserId(cursor.getLong(PAID_USER_ID_COLUMN));
 		try {
-			expense.setTime(Util.getDateFromString(cursor.getString(TIME_COLUMN)));
+			expense.setTime(Util.getDateFromString(cursor
+					.getString(TIME_COLUMN)));
 		} catch (ParseException e) {
 			expense.setTime(new Date()); // 出错时设置为现在
 		}
@@ -141,7 +181,8 @@ public class ExpenseDbAdapter {
 
 	public boolean updateEntry(Expense expense) {
 		if (expense == null) {
-			throw new IllegalArgumentException("expense argument must not be null");
+			throw new IllegalArgumentException(
+					"expense argument must not be null");
 		}
 		open();
 		ContentValues updatedValues = new ContentValues();
@@ -149,7 +190,7 @@ public class ExpenseDbAdapter {
 		updatedValues.put(KEY_NAME, expense.getName());
 		updatedValues.put(KEY_AMOUNT, expense.getAmount());
 		updatedValues.put(KEY_SHARED_USER_IDS, expense.getSharedUserIds());
-		updatedValues.put(KEY_PAID_USER_ID,expense.getPaidUserId());
+		updatedValues.put(KEY_PAID_USER_ID, expense.getPaidUserId());
 		String where = "expenseId = ?";
 		db.update(DATABASE_TABLE, updatedValues, where,
 				new String[] { expense.getExpenseId() + "" });
@@ -167,12 +208,7 @@ public class ExpenseDbAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			System.out.println("executeing create: "+DATABASE_CREATE);
-			try {
-				_db.execSQL(DATABASE_CREATE);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			System.out.println("do nothing ");
 		}
 
 		// Called when there is a database version mismatch meaning that the
@@ -181,20 +217,8 @@ public class ExpenseDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
-			// Log the version upgrade.
-			System.out.println("Upgrading from version " + _oldVersion + " to "
-					+ _newVersion + ", which will destroy all old data of table: "+DATABASE_TABLE);
-			// Upgrade the existing database to conform to the new version.
-			// Multiple
-			// previous versions can be handled by comparing _oldVersion and
-			// _newVersion
-			// values.
-			// The simplest case is to drop the old table and create a new one.
-			_db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
-			// Create a new one.
-			onCreate(_db);
+			System.out.println("Per-table upgrade is disabled");
 		}
 	}
 
-	
 }

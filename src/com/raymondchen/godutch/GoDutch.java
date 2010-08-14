@@ -8,6 +8,7 @@ import com.raymondchen.godutch.activity.NewExpenseActivity;
 import com.raymondchen.godutch.activity.NewTripActivity;
 import com.raymondchen.godutch.activity.SettingsActivity;
 import com.raymondchen.godutch.activity.UserManagementActivity;
+import com.raymondchen.godutch.dao.DbUtil;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -77,7 +78,7 @@ public class GoDutch extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		DbUtil.checkDbSchemaVersion(getApplicationContext());
 		loadActivityList();
 		initializeScreenElements();
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main,
