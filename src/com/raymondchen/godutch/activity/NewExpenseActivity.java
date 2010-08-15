@@ -10,12 +10,17 @@ import com.raymondchen.godutch.Trip;
 import com.raymondchen.godutch.User;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
@@ -42,6 +47,7 @@ public class NewExpenseActivity extends Activity {
 	List<Expense> expenseList;
 	
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,8 +69,7 @@ public class NewExpenseActivity extends Activity {
 		}
 		expenseSubmitButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				String validateResult=validateInput();
-				if (validateResult.equals("")) {
+				if (validateInput()) {
 					System.out.println("checkedRadioButtonId="+paidUserRadioGroup.getCheckedRadioButtonId());
 					Expense expense=new Expense();
 					expense.setName(expenseName);
@@ -77,9 +82,7 @@ public class NewExpenseActivity extends Activity {
 					expenseNameEditText.setText("");
 					expenseAmountEditText.setText("");
 					refreshExpenseList();
-				} else {
-					Toast.makeText(getApplicationContext(), validateResult, Toast.LENGTH_SHORT).show();
-				}
+				} 
 			}
 		});
 		listExpenseButton.setOnClickListener(new OnClickListener() {
@@ -108,32 +111,46 @@ public class NewExpenseActivity extends Activity {
 		int i=0;
 		for (Expense expense : expenseList) {
 			User paidUser=DataService.getUserById(getApplicationContext(), expense.getPaidUserId());
-			contextMenu.add(0,i++,0,expense.getName() + " ("+expense.getAmount()+") - paid by "+ paidUser.getName());
+			MenuItem menuItem=contextMenu.add(0,i++,0,expense.getName() + " ("+expense.getAmount()+") - "+ paidUser.getName());
+			menuItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+//					AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
+//					AlertDialog dialog=builder.create();
+//					dialog.setTitle("Delete Expense?");
+//					dialog.setMessage("Are you sure of deleting this expense?");
+//					dialog.show();
+					return true;
+				}
+			});
 		}
+
 	}
 	
 	
 
 
-	private String validateInput() {
-		String result="";
+	private boolean validateInput() {
 		if (expenseNameEditText.getText().toString().trim().equals("")) {
-			result +=getResources().getString(R.string.specifyExpenseNamePlease);
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyExpenseNamePlease), Toast.LENGTH_SHORT).show();
+			return false;
 		} else {
 			this.expenseName=expenseNameEditText.getText().toString().trim();
 		}
 		try {
 			this.expenseAmount=Double.parseDouble(expenseAmountEditText.getText().toString().trim());
 			if (this.expenseAmount==0d) {
-				result += getResources().getString(R.string.zeroAmountIllegal);
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.zeroAmountIllegal), Toast.LENGTH_SHORT).show();
+				return false;
 			}
 		} catch (NumberFormatException e) {
-			result +=" "+getResources().getString(R.string.specifyExpenseAmount);
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyExpenseAmount), Toast.LENGTH_SHORT).show();
+			return false;
 		}
 		if (paidUserRadioGroup.getCheckedRadioButtonId()<0) {
-			result+=" " +getResources().getString(R.string.specifyPaidUserPlease);
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyPaidUserPlease), Toast.LENGTH_SHORT).show();
+			return false;
 		}
-		return result;
+		return true;
 	}
 	
 	private void refreshExpenseList() {
@@ -190,6 +207,25 @@ public class NewExpenseActivity extends Activity {
 			}
 		}
 		throw new IllegalArgumentException("Invalid value of userId="+userId);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		int groupId = 0;
+		int deleteTripItemId = 0;
+		MenuItem aboutItem = menu.add(groupId, deleteTripItemId, Menu.NONE,
+				R.string.menuNameDeleteTrip);
+		aboutItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				DataService.deleteTripById(getApplicationContext(), trip.getTripId());
+				finish();
+				return true;
+			}
+		});
+		
+		
+		return true;
 	}
 
 }

@@ -43,4 +43,6 @@
 <string name="runReport">算账</string>
 <string name="noExpenseToDisplay">没有已发生的支付项目</string>
 <string name="currentTrips">当前活动列表</string>
+<string name="delete">删除</string>
+<string name="menuNameDeleteTrip">删除活动</string>
 </resources>

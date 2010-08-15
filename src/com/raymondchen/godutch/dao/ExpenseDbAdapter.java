@@ -87,6 +87,14 @@ public class ExpenseDbAdapter {
 		close();
 		return result;
 	}
+	
+	public boolean removeEntriesByTripId(long tripId) {
+		open();
+		boolean result = db.delete(DATABASE_TABLE, KEY_TRIP_ID + "=" + tripId,
+				null) > 0;
+		close();
+		return result;
+	}
 
 	public List<Expense> getAllEntries() {
 		open();

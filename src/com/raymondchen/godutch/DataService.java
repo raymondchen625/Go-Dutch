@@ -48,4 +48,16 @@ public class DataService {
 		ExpenseDbAdapter adapter=new ExpenseDbAdapter(context);
 		return adapter.getExpenseListByTripId(tripId);
 	}
+	
+	/**
+	 * also delete related expenses
+	 * @param tripId
+	 */
+	public static void deleteTripById(Context context,long tripId) {
+		ExpenseDbAdapter expenseAdapter=new ExpenseDbAdapter(context);
+		expenseAdapter.removeEntriesByTripId(tripId);
+		TripDbAdapter tripAdapter=new TripDbAdapter(context);
+		tripAdapter.removeEntry(tripId);
+				
+	}
 }

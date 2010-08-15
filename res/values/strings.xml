@@ -43,4 +43,6 @@
 <string name="runReport">Report</string>
 <string name="noExpenseToDisplay">Empty expense history</string>
 <string name="currentTrips">Current Trips</string>
+<string name="delete">Delete</string>
+<string name="menuNameDeleteTrip">Delete Trip</string>
 </resources>
