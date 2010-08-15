@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.raymondchen.godutch.activity.AboutActivity;
+import com.raymondchen.godutch.activity.HomePage;
 import com.raymondchen.godutch.activity.NewExpenseActivity;
 import com.raymondchen.godutch.activity.NewTripActivity;
 import com.raymondchen.godutch.activity.SettingsActivity;
@@ -40,7 +41,7 @@ public class GoDutch extends ListActivity {
 		aboutItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem _menuItem) {
 				Intent intent = new Intent(getApplicationContext(),
-						AboutActivity.class);
+						HomePage.class);
 				startActivity(intent);
 				return true;
 			}
@@ -79,10 +80,7 @@ public class GoDutch extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		DbUtil.checkDbSchemaVersion(getApplicationContext());
-		loadActivityList();
 		initializeScreenElements();
-		
-
 	}
 
 	/**
@@ -93,36 +91,25 @@ public class GoDutch extends ListActivity {
 	}
 
 	private void initializeScreenElements() {
+		loadActivityList();
 		screenElementList = new ArrayList<String>();
 		screenElementList.add(getResources().getString(R.string.newTrip));
-		// 加入最近三项活动列表（不足三项加入空标签），一个“全部活动”标签，最后加入一个“快速添加帐务”
 		for (int i = 0; i < tripList.size(); i++) {
 				screenElementList.add(tripList.get(i).getName());
-
 		}
-		screenElementList.add("快速添加帐务");
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main,
 				screenElementList));
 		ListView listView = getListView();
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (position>0 && position<screenElementList.size()-2) {
+				if (position>0) {
 					Trip trip=tripList.get(position-1);
-					Toast.makeText(getApplicationContext(),
-							 "tripId - " + trip.getTripId(),
-							Toast.LENGTH_SHORT).show();
 					Intent intent=new Intent(getApplicationContext(),NewExpenseActivity.class);
 					intent.putExtra("tripId", trip.getTripId());
 					startActivity(intent);
 				} else {
-				// When clicked, show a toast with the TextView text
-				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText() + "-" + position,
-						Toast.LENGTH_SHORT).show();
-				if (position==0) {
 					startActivity(new Intent(getApplicationContext(),NewTripActivity.class));
-				}
 				}
 			}
 		});

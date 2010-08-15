@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, GoDutch!</string>
-    <string name="app_name">Go Dutch</string>
+<string name="app_name">Go Dutch</string>
 <string name="newTrip">新建活动</string>
 <string name="newUser">新建用户</string>
 <string name="quickAddTransaction">快速添加账务</string>
@@ -35,11 +34,13 @@
 <string name="newExpense">新增支出项目</string>
 <string name="sharedByAll">所有人平摊</string>
 <string name="specifyExpenseNamePlease">请输入支付项目名称</string>
-<string name="specifyExpenseAmount">请输入支付金额</string>
+<string name="specifyExpenseAmount">请输入正确的支付金额</string>
 <string name="zeroAmountIllegal">支付金额不能为零</string>
 <string name="specifyPaidUserPlease">请指定支付人</string>
 <string name="addExpenseSucceeded">支付项目已成功添加</string>
 <string name="paidUser">付款人</string>
 <string name="listExpense">查看已支付列表</string>
 <string name="runReport">算账</string>
+<string name="noExpenseToDisplay">没有已发生的支付项目</string>
+<string name="currentTrips">当前活动列表</string>
 </resources>

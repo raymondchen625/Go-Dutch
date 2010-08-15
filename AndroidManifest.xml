@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".GoDutch"
+        <activity android:name=".activity.HomePage"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -12,13 +12,14 @@
             </intent-filter>
         </activity>
 
-    <activity android:name=".activity.SettingsActivity" android:label="@string/menuNameSetting" android:launchMode="singleTask"></activity>
+<activity android:name=".activity.SettingsActivity" android:label="@string/menuNameSetting" android:launchMode="singleTask"></activity>
 <activity android:label="@string/about" android:launchMode="singleTask" android:name=".activity.AboutActivity"></activity>
 <activity android:label="@string/menuNameUserManagement" android:name=".activity.UserManagementActivity"></activity>
 <activity android:launchMode="singleTask" android:name=".activity.NewUserActivity" android:label="@string/newUser"></activity>
 <activity android:name=".activity.NewTripActivity" android:label="@string/newTrip"></activity>
 <activity android:name=".activity.SelectTripUsersActivity" android:label="@string/selectUsers"></activity>
 <activity android:label="@string/newExpense" android:name=".activity.NewExpenseActivity"></activity>
+
 </application>
 
 

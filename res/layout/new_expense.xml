@@ -18,9 +18,9 @@
 			android:text="" android:layout_width="fill_parent"
 			android:layout_height="wrap_content"></EditText>
 	</TableRow>
-	<TableRow>
-	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-	</TableRow>
+<!--	<TableRow>-->
+<!--	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>-->
+<!--	</TableRow>-->
 	<TableRow>
 	<TextView android:id="@+id/paidUserTextView" android:text="@string/paidUser" />
 	<RadioGroup android:id="@+id/paidUserRadioGroup" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioGroup>

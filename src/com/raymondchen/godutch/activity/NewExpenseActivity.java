@@ -55,7 +55,6 @@ public class NewExpenseActivity extends Activity {
 		expenseAmountEditText=(EditText)findViewById(R.id.expenseAmountEditText);
 		paidUserRadioGroup=(RadioGroup)findViewById(R.id.paidUserRadioGroup);
 		runReportButton=(Button)findViewById(R.id.runReportButton);
-		
 		refreshExpenseList();
 		for (User user : userList) {
 			RadioButton radioButton=new RadioButton(getApplicationContext());
@@ -81,12 +80,15 @@ public class NewExpenseActivity extends Activity {
 				} else {
 					Toast.makeText(getApplicationContext(), validateResult, Toast.LENGTH_SHORT).show();
 				}
-				
 			}
 		});
 		listExpenseButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				if (expenseList.size()==0) {
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.noExpenseToDisplay), Toast.LENGTH_SHORT).show();
+				} else {
 				listExpenseButton.performLongClick();
+				}
 			}
 		});
 		runReportButton.setOnClickListener(new OnClickListener() {
@@ -159,7 +161,7 @@ public class NewExpenseActivity extends Activity {
 			alreadyPaidAmount[getUserListPositionByUserId(expense.getPaidUserId())]+=expense.getAmount();
 		}
 		if (totalAmount==0d) {
-			Toast.makeText(getApplicationContext(), "Nothing paid", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(),  getResources().getString(R.string.noExpenseToDisplay), Toast.LENGTH_SHORT).show();
 			return ;
 		}
 		double average=Math.round((totalAmount/headCount)*100)/100;
