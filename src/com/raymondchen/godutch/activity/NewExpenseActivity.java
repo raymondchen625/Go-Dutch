@@ -73,7 +73,6 @@ public class NewExpenseActivity extends Activity {
 		expenseSubmitButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (validateInput()) {
-					System.out.println("checkedRadioButtonId="+paidUserRadioGroup.getCheckedRadioButtonId());
 					Expense expense=new Expense();
 					expense.setName(expenseName);
 					expense.setAmount(expenseAmount);
@@ -110,7 +109,6 @@ public class NewExpenseActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu contextMenu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(contextMenu, v, menuInfo);
-		System.out.println();
 		int i=0;
 		for (Expense expense : expenseList) {
 			User paidUser=DataService.getUserById(getApplicationContext(), expense.getPaidUserId());
@@ -199,7 +197,6 @@ public class NewExpenseActivity extends Activity {
 			return ;
 		}
 		double average=Math.round((totalAmount/headCount)*100)/100;
-		System.out.println("average="+average);
 		for (int i=0;i<headCount;i++) {
 			String paidStr=userList.get(i).getName() + " : ";
 			if (i<headCount-1) {

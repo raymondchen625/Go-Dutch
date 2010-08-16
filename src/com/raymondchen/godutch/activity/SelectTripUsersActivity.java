@@ -52,9 +52,6 @@ public class SelectTripUsersActivity extends ListActivity   {
 		adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
 			public boolean setViewValue(View view, Object data,
 					String textRepresentation) {
-				if (view instanceof CheckBox) {
-				System.out.println("textRepresentation="+data.getClass());
-				}
 				return false;
 			}
 		});
