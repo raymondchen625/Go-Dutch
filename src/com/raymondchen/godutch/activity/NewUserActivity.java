@@ -8,7 +8,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +59,22 @@ public class NewUserActivity extends Activity {
 	private void resetForm() {
 		this.nameEditText.setText("");
 		this.emailEditText.setText("");
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		int groupId = 0;
+		int returnItemId = 0;
+		MenuItem backItem = menu.add(groupId, returnItemId, Menu.NONE,
+				R.string.back);
+		backItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				finish();
+				return true;
+			}
+		});
+		return true;
 	}
 
 }

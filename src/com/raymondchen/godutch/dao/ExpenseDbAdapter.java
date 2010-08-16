@@ -216,7 +216,6 @@ public class ExpenseDbAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			System.out.println("do nothing ");
 		}
 
 		// Called when there is a database version mismatch meaning that the
@@ -225,8 +224,20 @@ public class ExpenseDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
-			System.out.println("Per-table upgrade is disabled");
 		}
+	}
+	
+	/**
+	 * 删除该用户支付的所有expense
+	 * @param userId
+	 * @return
+	 */
+	public boolean removeEntriesByPaidUserId(long userId) {
+		open();
+		boolean result = db.delete(DATABASE_TABLE, KEY_PAID_USER_ID + "=" + userId,
+				null) > 0;
+		close();
+		return result;
 	}
 
 }

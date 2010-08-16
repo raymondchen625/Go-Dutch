@@ -58,6 +58,24 @@ public class DataService {
 		expenseAdapter.removeEntriesByTripId(tripId);
 		TripDbAdapter tripAdapter=new TripDbAdapter(context);
 		tripAdapter.removeEntry(tripId);
-				
+	}
+	
+	public static void deleteExpenseById(Context context,long expenseId) {
+		ExpenseDbAdapter expenseAdapter=new ExpenseDbAdapter(context);
+		expenseAdapter.removeEntry(expenseId);
+	}
+	
+	/**
+	 * 删除用户将同时删除涉及此用户的所有expense和trip
+	 * @param context
+	 * @param userId
+	 */
+	public static void deleteUserById(Context context, long userId) {
+		ExpenseDbAdapter expenseAdapter=new ExpenseDbAdapter(context);
+		expenseAdapter.removeEntriesByPaidUserId(userId);
+		TripDbAdapter tripAdapter=new TripDbAdapter(context);
+		tripAdapter.removeEntriesJoinedByUser(userId);
+		UserDbAdapter userAdapter=new UserDbAdapter(context);
+		userAdapter.removeEntry(userId);
 	}
 }

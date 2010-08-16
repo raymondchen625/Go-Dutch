@@ -72,7 +72,6 @@ public class TripDbAdapter {
 	}
 
 	public List<Trip> getAllEntries() {
-		System.out.println("db=" + db);
 		open();
 		Cursor cursor = db.query(DATABASE_TABLE, new String[] { KEY_ID,
 				KEY_NAME, KEY_MEMBER_IDS }, null, null, null, null, null);
@@ -147,7 +146,6 @@ public class TripDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
-			System.out.println("Per-table upgrade is disabled");
 		}
 	}
 
@@ -155,7 +153,6 @@ public class TripDbAdapter {
 		if (memberIdList == null) {
 			memberIdList = "";
 		}
-		System.out.println("memberIdList=" + memberIdList);
 		List<User> memberList = new ArrayList<User>();
 		String[] idList = memberIdList.split(",");
 		for (String id : idList) {
@@ -165,5 +162,12 @@ public class TripDbAdapter {
 			}
 		}
 		trip.setMembers(memberList);
+	}
+	
+	public boolean removeEntriesJoinedByUser(long userId) {
+		open();
+		boolean result = db.delete(DATABASE_TABLE, KEY_MEMBER_IDS + " like ? or "+KEY_MEMBER_IDS +" like ? or "+KEY_MEMBER_IDS +" like ?" , new String[]{userId+",%","%,"+userId,"%,"+userId+",%"}) > 0;
+		close();
+		return result;
 	}
 }

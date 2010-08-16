@@ -32,7 +32,6 @@ public class DbUtil {
 			
 		};
 		SQLiteDatabase db=helper.getReadableDatabase();
-		System.out.println("db version="+db.getVersion());
 		db.close();
 	}
 	

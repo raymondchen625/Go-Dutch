@@ -21,7 +21,10 @@ import android.preference.DialogPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -110,7 +113,21 @@ public class SelectTripUsersActivity extends ListActivity   {
 		
 	}
 
-	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		int groupId = 0;
+		int returnItemId = 0;
+		MenuItem backItem = menu.add(groupId, returnItemId, Menu.NONE,
+				R.string.back);
+		backItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				finish();
+				return true;
+			}
+		});
+		return true;
+	}
 
 
 }

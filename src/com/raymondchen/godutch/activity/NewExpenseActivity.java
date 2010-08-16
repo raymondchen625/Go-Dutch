@@ -12,9 +12,11 @@ import com.raymondchen.godutch.User;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.test.PerformanceTestCase;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewExpenseActivity extends Activity {
@@ -112,13 +115,27 @@ public class NewExpenseActivity extends Activity {
 		for (Expense expense : expenseList) {
 			User paidUser=DataService.getUserById(getApplicationContext(), expense.getPaidUserId());
 			MenuItem menuItem=contextMenu.add(0,i++,0,expense.getName() + " ("+expense.getAmount()+") - "+ paidUser.getName());
+			final NewExpenseActivity parentObj=this;
 			menuItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item) {
-//					AlertDialog.Builder builder=new AlertDialog.Builder(getApplicationContext());
-//					AlertDialog dialog=builder.create();
-//					dialog.setTitle("Delete Expense?");
-//					dialog.setMessage("Are you sure of deleting this expense?");
-//					dialog.show();
+					final long expenseId=expenseList.get(item.getItemId()).getExpenseId();
+					AlertDialog.Builder builder=new AlertDialog.Builder(parentObj);
+					builder.setPositiveButton(R.string.delete,new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							DataService.deleteExpenseById(getApplicationContext(), expenseId);
+							refreshExpenseList();
+						}
+					});
+					builder.setCancelable(true);
+					builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int which) {
+						}
+						
+					});
+					AlertDialog dialog=builder.create();
+					dialog.setTitle(getResources().getString(R.string.confirmDeleteExpense));
+					dialog.setMessage(getResources().getString(R.string.deleteExpenseWarning));
+					dialog.show();
 					return true;
 				}
 			});
@@ -197,7 +214,15 @@ public class NewExpenseActivity extends Activity {
 			finalReportString+=s;
 			finalReportString+="\n";
 		}
-		Toast.makeText(getApplicationContext(), finalReportString, Toast.LENGTH_LONG).show();
+//		Toast.makeText(getApplicationContext(), finalReportString, Toast.LENGTH_LONG).show();
+		AlertDialog.Builder builder=new AlertDialog.Builder(this);
+		AlertDialog dialog=builder.create();
+		TextView tv=new TextView(getApplicationContext());
+		tv.setText(finalReportString);
+		dialog.setView(tv);
+		dialog.setTitle("Expense Report");
+//		dialog.setMessage(finalReportString);
+		dialog.show();
 	}
 	
 	private int getUserListPositionByUserId(long userId) {
@@ -213,19 +238,49 @@ public class NewExpenseActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		int groupId = 0;
-		int deleteTripItemId = 0;
-		MenuItem aboutItem = menu.add(groupId, deleteTripItemId, Menu.NONE,
-				R.string.menuNameDeleteTrip);
-		aboutItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		int returnItemId = 0;
+		int deleteTripItemId = 1;
+		MenuItem backItem = menu.add(groupId, returnItemId, Menu.NONE,
+				R.string.back);
+		backItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem _menuItem) {
-				DataService.deleteTripById(getApplicationContext(), trip.getTripId());
 				finish();
 				return true;
 			}
 		});
-		
-		
+		final NewExpenseActivity parentObj=this;
+		MenuItem aboutItem = menu.add(groupId, deleteTripItemId, Menu.NONE,
+				R.string.menuNameDeleteTrip);
+		aboutItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				AlertDialog.Builder builder=new AlertDialog.Builder(parentObj);
+				builder.setPositiveButton(R.string.delete,new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						DataService.deleteTripById(getApplicationContext(), trip.getTripId());
+						finish();
+					}
+				});
+				builder.setCancelable(true);
+				builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				AlertDialog dialog=builder.create();
+				dialog.setTitle(getResources().getString(R.string.confirmDeleteTrip));
+				dialog.setMessage(getResources().getString(R.string.deleteTripWarning));
+				dialog.show();
+				
+				return true;
+			}
+		});
 		return true;
+	}
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		refreshExpenseList();
 	}
 
 }

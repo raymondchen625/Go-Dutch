@@ -57,18 +57,6 @@ public class HomePage extends Activity {
 			}
 		});
 		
-		/**
-		MenuItem settingItem = menu.add(groupId, SETTING_ITEM_ID, Menu.NONE,
-				R.string.menuNameSetting);
-		settingItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem _menuItem) {
-				Intent intent = new Intent(getApplicationContext(),
-						SettingsActivity.class);
-				startActivity(intent);
-				return true;
-			}
-		});
-		*/
 		MenuItem newTripItem=menu.add(groupId,NEW_TRIP_ITEM_ID,Menu.NONE,R.string.newTrip);
 		newTripItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem _menuItem) {
@@ -142,10 +130,8 @@ public class HomePage extends Activity {
 	public void onCreateContextMenu(ContextMenu contextMenu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(contextMenu, v, menuInfo);
-		System.out.println();
 		int i=0;
     	contextMenu.add(0,i++,0,getResources().getString(R.string.delete));
-		
 	}
 	
 	/**

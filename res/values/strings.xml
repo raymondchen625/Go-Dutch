@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Go Dutch</string>
+<string name="version">Version 0.9</string>
 <string name="newTrip">Create Trip</string>
 <string name="newUser">Crate User</string>
 <string name="quickAddTransaction">Quick-add Expense</string>
@@ -26,7 +27,7 @@
 <string name="join">Joined</string>
 <string name="notjoin">Not Joined</string>
 <string name="confirm">Confirm</string>
-<string name="selectUsersPlease">Please select users</string>
+<string name="selectUsersPlease">Please select at least 2 users</string>
 <string name="specifyTripNamePlease">Please specify trip name</string>
 <string name="addTripSucceeded">New trip added</string>
 <string name="expenseName">Expense Name</string>
@@ -45,4 +46,12 @@
 <string name="currentTrips">Current Trips</string>
 <string name="delete">Delete</string>
 <string name="menuNameDeleteTrip">Delete Trip</string>
+<string name="cancel">Cancel</string>
+<string name="back">Return</string>
+<string name="confirmDeleteUser">Delete User?</string>
+<string name="deleteUserWarning">All trips joined by this user will also be deleted. Are you sure?</string>
+<string name="confirmDeleteExpense">Delete Expense?</string>
+<string name="deleteExpenseWarning">Are you sure to delete this expense?</string>
+<string name="confirmDeleteTrip">Delete Trip?</string>
+<string name="deleteTripWarning">Are you sure to delete this trip?</string>
 </resources>

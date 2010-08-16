@@ -6,6 +6,9 @@ import com.raymondchen.godutch.R;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,6 +58,22 @@ public class SettingsActivity extends Activity {
 		editor.putBoolean("displayTaxRate", displayTaxRate);
 		editor.putInt("defaultActivityNumber", defaultActivityNumber);
 		editor.commit();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		int groupId = 0;
+		int returnItemId = 0;
+		MenuItem backItem = menu.add(groupId, returnItemId, Menu.NONE,
+				R.string.back);
+		backItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				finish();
+				return true;
+			}
+		});
+		return true;
 	}
 
 }

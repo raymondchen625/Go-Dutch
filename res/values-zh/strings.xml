@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Go Dutch</string>
+<string name="version">版本 0.9</string>
 <string name="newTrip">新建活动</string>
 <string name="newUser">新建用户</string>
 <string name="quickAddTransaction">快速添加账务</string>
@@ -26,10 +27,10 @@
 <string name="join">参加</string>
 <string name="notjoin">不参加</string>
 <string name="confirm">确认</string>
-<string name="selectUsersPlease">请选择用户</string>
+<string name="selectUsersPlease">请选择至少2个用户</string>
 <string name="specifyTripNamePlease">请输入活动名称</string>
 <string name="addTripSucceeded">活动已成功添加</string>
-<string name="expenseName">支出项目名</string>
+<string name="expenseName">支付项目名</string>
 <string name="expenseAmount">金额</string>
 <string name="newExpense">新增支出项目</string>
 <string name="sharedByAll">所有人平摊</string>
@@ -45,4 +46,12 @@
 <string name="currentTrips">当前活动列表</string>
 <string name="delete">删除</string>
 <string name="menuNameDeleteTrip">删除活动</string>
+<string name="cancel">取消</string>
+<string name="back">返回</string>
+<string name="confirmDeleteUser">删除用户？</string>
+<string name="deleteUserWarning">此用户参加的活动也将会被删除，确定吗？</string>
+<string name="confirmDeleteExpense">删除支付项目？</string>
+<string name="deleteExpenseWarning">真的删除这项支付项目吗？</string>
+<string name="confirmDeleteTrip">删除活动？</string>
+<string name="deleteTripWarning">真的删除这个活动吗？</string>
 </resources>

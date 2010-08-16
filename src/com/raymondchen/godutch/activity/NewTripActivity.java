@@ -11,7 +11,10 @@ import com.raymondchen.godutch.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +43,7 @@ public class NewTripActivity extends Activity {
 		});
 		addTripButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (selectedUserList==null || selectedUserList.size()==0) {
+				if (selectedUserList==null || selectedUserList.size()<=1) {
 					Toast.makeText(getApplicationContext(), getResources().getText(R.string.selectUsersPlease), Toast.LENGTH_SHORT).show();
 					return ;
 				} else if (newTripEditText.getText().toString().equals("")) {
@@ -60,8 +63,6 @@ public class NewTripActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		System.out.println("requestCode="+requestCode);
-		System.out.println("resultCode="+resultCode);
 		Bundle bundle=data.getBundleExtra(getPackageName());
 		long[] userIdArray=bundle.getLongArray(getPackageName());
 		refreshSelectedUserList(userIdArray);
@@ -80,6 +81,22 @@ public class NewTripActivity extends Activity {
 			}
 		}
 		selectedUserListTextView.setText(userListText);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		int groupId = 0;
+		int returnItemId = 0;
+		MenuItem backItem = menu.add(groupId, returnItemId, Menu.NONE,
+				R.string.back);
+		backItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem _menuItem) {
+				finish();
+				return true;
+			}
+		});
+		return true;
 	}
 
 }

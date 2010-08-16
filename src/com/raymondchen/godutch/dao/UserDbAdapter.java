@@ -69,7 +69,6 @@ public class UserDbAdapter {
 	}
 
 	public List<User> getAllEntries() {
-		System.out.println("db="+db);
 		open();
 		Cursor cursor= db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_NAME,KEY_EMAIL },
 				null, null, null, null, null);
@@ -126,7 +125,6 @@ public class UserDbAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			System.out.println("do nothing");
 		}
 
 		// Called when there is a database version mismatch meaning that the
@@ -135,7 +133,6 @@ public class UserDbAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
-			System.out.println("Per-table upgrade is disabled");
 		}
 	}
 }
