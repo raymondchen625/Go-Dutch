@@ -37,25 +37,16 @@ public class SelectTripUsersActivity extends ListActivity   {
 	List<CheckBoxPreference> userCheckboxList;
 	List<User> currentUserList=new ArrayList<User>();
 	List<User> selectedUserList=new ArrayList<User>();
-	
 	List<Map<String,Object>> listContent=new ArrayList<Map<String,Object>>();
 	PreferenceScreen selectTripUserActivity;
 	DialogPreference addNewUser;
+	Button newUserButton;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_trip_users);
+		this.newUserButton=(Button)findViewById(R.id.newUserButton);
 		refreshUserList();
-//		ListView listView = getListView();
-//		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		SimpleAdapter adapter=new SimpleAdapter(getApplicationContext(), listContent, R.layout.select_user_item,new String[]{"name","email","selected"}, new int[]{R.id.nameSelectTextView,R.id.emailSelectTextView,R.id.selectUserItemCheckBox});
-		adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-			public boolean setViewValue(View view, Object data,
-					String textRepresentation) {
-				return false;
-			}
-		});
-		setListAdapter(adapter);
 		// register ok button listener
 		Button selectUserFinishButton=(Button)findViewById(R.id.selectUserFinishButton);
 		selectUserFinishButton.setOnClickListener(new OnClickListener() {
@@ -78,7 +69,12 @@ public class SelectTripUsersActivity extends ListActivity   {
 				result.putExtra(getPackageName(),bundle);
 				setResult(Activity.RESULT_OK,result);
 				finish();
-				
+			}
+		});
+		newUserButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent=new Intent(getApplicationContext(),NewUserActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
@@ -102,6 +98,14 @@ public class SelectTripUsersActivity extends ListActivity   {
 				listContent.add(map);
 			}
 		}
+		SimpleAdapter adapter=new SimpleAdapter(getApplicationContext(), listContent, R.layout.select_user_item,new String[]{"name","email","selected"}, new int[]{R.id.nameSelectTextView,R.id.emailSelectTextView,R.id.selectUserItemCheckBox});
+		adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+			public boolean setViewValue(View view, Object data,
+					String textRepresentation) {
+				return false;
+			}
+		});
+		setListAdapter(adapter);
 	}
 
 	@Override
