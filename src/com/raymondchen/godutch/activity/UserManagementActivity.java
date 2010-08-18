@@ -56,7 +56,11 @@ public class UserManagementActivity extends Activity {
 		userList = DataService.loadUserList(getApplicationContext());
 		screenElementList = new ArrayList<String>();
 		for (int i = 0; i < userList.size(); i++) {
-				screenElementList.add(userList.get(i).getName() + " ("+userList.get(i).getEmail()+")");
+			String email="";
+			if (userList.get(i).getEmail()!=null && !userList.get(i).getEmail().trim().equals("")){
+				email=" ("+userList.get(i).getEmail()+")";
+			}
+				screenElementList.add(userList.get(i).getName() + email);
 		}
 		ArrayAdapter<String> listAdapter=new ArrayAdapter<String>(this, R.layout.main,
 				screenElementList);

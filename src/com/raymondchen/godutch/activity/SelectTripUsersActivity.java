@@ -91,9 +91,13 @@ public class SelectTripUsersActivity extends ListActivity   {
 		for (User user : userList) {
 			if (! currentUserList.contains(user)) {
 				currentUserList.add(user);
+				String email="";
+				if (user.getEmail()!=null && !user.getEmail().trim().equals("")){
+					email=" ("+user.getEmail()+")";
+				}
 				Map<String,Object> map=new HashMap<String,Object>();
 				map.put("name", user.getName());
-				map.put("email",user.getEmail());
+				map.put("email",email);
 				map.put("selected", false);
 				listContent.add(map);
 			}
