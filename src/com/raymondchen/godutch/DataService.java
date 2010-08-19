@@ -1,7 +1,6 @@
 package com.raymondchen.godutch;
 
 import java.util.List;
-
 import com.raymondchen.godutch.dao.ExpenseDbAdapter;
 import com.raymondchen.godutch.dao.TripDbAdapter;
 import com.raymondchen.godutch.dao.UserDbAdapter;
@@ -28,7 +27,7 @@ public class DataService {
 		TripDbAdapter adapter=new TripDbAdapter(context);
 		adapter.insertEntry(trip);
 	}
-	
+
 	public static List<Trip> getAllTripList(Context context) {
 		TripDbAdapter adapter=new TripDbAdapter(context);
 		return adapter.getAllEntries();
@@ -78,4 +77,5 @@ public class DataService {
 		UserDbAdapter userAdapter=new UserDbAdapter(context);
 		userAdapter.removeEntry(userId);
 	}
+
 }

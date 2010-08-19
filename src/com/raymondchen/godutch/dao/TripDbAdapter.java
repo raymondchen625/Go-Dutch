@@ -9,13 +9,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-
 import com.raymondchen.godutch.DataService;
 import com.raymondchen.godutch.Trip;
 import com.raymondchen.godutch.User;
 
 public class TripDbAdapter {
 	private static final String DATABASE_TABLE = "trip";
+
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "tripId";
 	// 定义各个其它字段以及它们的序号
@@ -29,6 +29,7 @@ public class TripDbAdapter {
 			+ DATABASE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_NAME
 			+ " text not null, " + KEY_MEMBER_IDS + " text);";
+
 	// Variable to hold the database instance
 	private SQLiteDatabase db;
 	// Context of the application using the database.
@@ -139,7 +140,6 @@ public class TripDbAdapter {
 		public void onCreate(SQLiteDatabase _db) {
 			// do nothing
 		}
-
 		// Called when there is a database version mismatch meaning that the
 		// version
 		// of the database on disk needs to be upgraded to the current version.
