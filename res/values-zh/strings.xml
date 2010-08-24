@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Go Dutch</string>
-<string name="version">版本 0.9</string>
+<string name="version">版本 1.0</string>
 <string name="newTrip">新建活动</string>
 <string name="newUser">新建用户</string>
 <string name="quickAddTransaction">快速添加账务</string>
@@ -54,4 +54,5 @@
 <string name="deleteExpenseWarning">真的删除这项支付项目吗？</string>
 <string name="confirmDeleteTrip">删除活动？</string>
 <string name="deleteTripWarning">真的删除这个活动吗？</string>
+<string name="importFromContacts">从通讯录添加</string>
 </resources>

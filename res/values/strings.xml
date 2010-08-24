@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Go Dutch</string>
-<string name="version">Version 0.9</string>
+<string name="version">Version 1.0</string>
 <string name="newTrip">Create Trip</string>
 <string name="newUser">Crate User</string>
 <string name="quickAddTransaction">Quick-add Expense</string>
@@ -54,4 +54,5 @@
 <string name="deleteExpenseWarning">Are you sure to delete this expense?</string>
 <string name="confirmDeleteTrip">Delete Trip?</string>
 <string name="deleteTripWarning">Are you sure to delete this trip?</string>
+<string name="importFromContacts">Add from Contacts</string>
 </resources>
