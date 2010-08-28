@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
-	android:orientation="horizontal" android:stretchColumns="1">
+	android:orientation="horizontal" android:stretchColumns="1" >
 	<TableRow>
 		<TextView android:text="@string/expenseName" android:id="@+id/expenseNameTextView"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
@@ -18,13 +18,25 @@
 			android:text="" android:layout_width="fill_parent"
 			android:layout_height="wrap_content"></EditText>
 	</TableRow>
-<!--	<TableRow>-->
-<!--	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>-->
-<!--	</TableRow>-->
+	<TableRow android:id="@+id/sharedUsersTextViewTableRow">
+		<TextView android:id="@+id/sharedUserTextView" android:text="@string/sharedUsers" />
+	</TableRow>
+	<TableRow android:id="@+id/sharedByAllCheckBoxTableRow" >
+	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+	</TableRow>
+
+	<TableRow android:id="@+id/sharedUsersCheckBoxGroupTableRow" android:visibility="gone" >
+	<LinearLayout android:id="@+id/sharedUsersCheckBoxGroupLayout" android:orientation="vertical"  />
+	</TableRow>
 	<TableRow>
-	<TextView android:id="@+id/paidUserTextView" android:text="@string/paidUser" />
+	<Button android:id="@+id/paidUserButton" android:text="@string/paidUser" />
+	<TextView android:id="@+id/paidByUserTextView" android:text=""/>
+	</TableRow>
+	
+	<TableRow android:id="@+id/paidUserRadioGroupTableRow" >
 	<RadioGroup android:id="@+id/paidUserRadioGroup" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioGroup>
 	</TableRow>
+
 	<TableRow>
 <Button android:text="@string/add" android:id="@+id/expenseSubmitButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>	
 <Button android:id="@+id/listExpenseButton" android:text="@string/listExpense" android:layout_width="wrap_content"></Button>

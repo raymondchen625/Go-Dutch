@@ -3,7 +3,7 @@
 <string name="app_name">Go Dutch</string>
 <string name="version">Version 1.0</string>
 <string name="newTrip">Create Trip</string>
-<string name="newUser">Crate User</string>
+<string name="newUser">Create User</string>
 <string name="quickAddTransaction">Quick-add Expense</string>
 <string name="menuNameAbout">About</string>
 <string name="menuNameSetting">Settings</string>
@@ -39,6 +39,7 @@
 <string name="zeroAmountIllegal">0 is invalid expense amount</string>
 <string name="specifyPaidUserPlease">Please specify paid user</string>
 <string name="addExpenseSucceeded">New expense added</string>
+<string name="sharedUsers">Shared by</string>
 <string name="paidUser">Paid by</string>
 <string name="listExpense">Expense List</string>
 <string name="runReport">Report</string>
@@ -55,4 +56,9 @@
 <string name="confirmDeleteTrip">Delete Trip?</string>
 <string name="deleteTripWarning">Are you sure to delete this trip?</string>
 <string name="importFromContacts">Add from Contacts</string>
+<string name="specifySharedUsersPlease">Please specify at least one shared user</string>
+<string name="tripName">Trip</string>
+<string name="tripMembers">Members</string>
+<string name="everyone">Everyone</string>
+<string name="selectPaidUser">Select Paid User</string>
 </resources>

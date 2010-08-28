@@ -19,6 +19,8 @@
 <activity android:name=".activity.SelectTripUsersActivity" android:label="@string/selectUsers"></activity>
 <activity android:label="@string/newExpense" android:name=".activity.NewExpenseActivity"></activity>
 
+<activity android:name=".activity.ExpenseDetailActivity" android:label="@string/listExpense"></activity>
+<activity android:label="@string/selectPaidUser" android:name=".activity.SelectPaidUserActivity"></activity>
 </application>
 
 

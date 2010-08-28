@@ -14,6 +14,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Interpolator.Result;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -28,6 +30,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -92,20 +95,34 @@ public class SelectTripUsersActivity extends ListActivity   {
 			if (! currentUserList.contains(user)) {
 				currentUserList.add(user);
 				String email="";
+				Bitmap avatarBitmap=null;
 				if (user.getEmail()!=null && !user.getEmail().trim().equals("")){
 					email=" ("+user.getEmail()+")";
+				}
+				if (user.getAvatar()!=null) {
+					avatarBitmap=BitmapFactory.decodeByteArray(user.getAvatar(), 0, user.getAvatar().length);
 				}
 				Map<String,Object> map=new HashMap<String,Object>();
 				map.put("name", user.getName());
 				map.put("email",email);
 				map.put("selected", false);
+				map.put("avatar", avatarBitmap);
 				listContent.add(map);
 			}
 		}
-		SimpleAdapter adapter=new SimpleAdapter(getApplicationContext(), listContent, R.layout.select_user_item,new String[]{"name","email","selected"}, new int[]{R.id.nameSelectTextView,R.id.emailSelectTextView,R.id.selectUserItemCheckBox});
+		SimpleAdapter adapter=new SimpleAdapter(getApplicationContext(), listContent, R.layout.select_user_item,new String[]{"name","email","selected","avatar"}, new int[]{R.id.nameSelectTextView,R.id.emailSelectTextView,R.id.selectUserItemCheckBox,R.id.avatarSelectImageView});
 		adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-			public boolean setViewValue(View view, Object data,
+			public boolean setViewValue(View view, Object obj,
 					String textRepresentation) {
+				if (view instanceof ImageView) {
+					ImageView image=(ImageView)view;
+					if (obj!=null) {
+					image.setImageBitmap((Bitmap)obj);
+					} else {
+						image.setImageResource(R.drawable.default_avatar);
+					}
+					return true;
+				}
 				return false;
 			}
 		});

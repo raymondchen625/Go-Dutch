@@ -15,6 +15,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.test.PerformanceTestCase;
 import android.view.ContextMenu;
@@ -26,12 +28,17 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +54,16 @@ public class NewExpenseActivity extends Activity {
 	private List<User> userList;
 	private String expenseName;
 	private double expenseAmount;
+	private CheckBox sharedByAllCheckBox;
+	private LinearLayout sharedUsersCheckBoxGroupLayout;
+	private TableRow sharedUsersRadioGroupTableRow;
+	private TableRow sharedUsersTextViewTableRow;
+	private TableRow sharedByAllCheckBoxTableRow;
+	private TableRow sharedUserCheckBoxGroupTableRow;
+	private Button paidByUserButton;
+	private Button paidByUserTextView;
 	List<Expense> expenseList;
+	private static final int REQUEST_CODE_SELECT_PAID_USER=0;
 	
 	
 	
@@ -58,17 +74,15 @@ public class NewExpenseActivity extends Activity {
 		trip=DataService.getTripById(getApplicationContext(), tripId);
 		userList=trip.getMembers();
 		setContentView(R.layout.new_expense);
-		expenseSubmitButton=(Button)findViewById(R.id.expenseSubmitButton);
-		expenseNameEditText=(EditText)findViewById(R.id.expenseNameEditText);
-		listExpenseButton=(Button)findViewById(R.id.listExpenseButton);
-		expenseAmountEditText=(EditText)findViewById(R.id.expenseAmountEditText);
-		paidUserRadioGroup=(RadioGroup)findViewById(R.id.paidUserRadioGroup);
-		runReportButton=(Button)findViewById(R.id.runReportButton);
+		initializeLayoutElements();
 		refreshExpenseList();
 		for (User user : userList) {
 			RadioButton radioButton=new RadioButton(getApplicationContext());
 			radioButton.setText(user.getName());
 			paidUserRadioGroup.addView(radioButton);
+			CheckBox checkBox=new CheckBox(getApplicationContext());
+			checkBox.setText(user.getName());
+			sharedUsersCheckBoxGroupLayout.addView(checkBox);
 		}
 		expenseSubmitButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -76,7 +90,7 @@ public class NewExpenseActivity extends Activity {
 					Expense expense=new Expense();
 					expense.setName(expenseName);
 					expense.setAmount(expenseAmount);
-					expense.setSharedUserIds(trip.getMemberIds());
+					expense.setSharedUserIds(sharedByAllCheckBox.isChecked()?trip.getMemberIds():getSelectedSharedUserIds());
 					expense.setTripId(trip.getTripId());
 					expense.setPaidUserId(getCheckedPaidUser().getUserId());
 					DataService.addExpense(getApplicationContext(), expense);
@@ -92,7 +106,9 @@ public class NewExpenseActivity extends Activity {
 				if (expenseList.size()==0) {
 					Toast.makeText(getApplicationContext(), getResources().getString(R.string.noExpenseToDisplay), Toast.LENGTH_SHORT).show();
 				} else {
-				listExpenseButton.performLongClick();
+				  Intent intent=new Intent(getApplicationContext(),ExpenseDetailActivity.class);
+				  intent.putExtra("tripId", trip.getTripId());
+				  startActivity(intent);
 				}
 			}
 		});
@@ -100,11 +116,39 @@ public class NewExpenseActivity extends Activity {
 			public void onClick(View v) {
 				runReport();
 			}
-			
+		});
+		sharedByAllCheckBox.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if (sharedByAllCheckBox.isChecked()) {
+					sharedUserCheckBoxGroupTableRow.setVisibility(TableRow.GONE);
+				} else {
+					sharedUserCheckBoxGroupTableRow.setVisibility(TableRow.VISIBLE);
+				}
+			}
+		});
+		paidByUserButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent=new Intent(getApplicationContext(),SelectPaidUserActivity.class);
+				intent.putExtra("tripId", trip.getTripId());
+				startActivityForResult(intent, REQUEST_CODE_SELECT_PAID_USER);
+			}
 		});
 	}
 	
 	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode==REQUEST_CODE_SELECT_PAID_USER) {
+			if (resultCode==Activity.RESULT_OK) {
+				System.out.println("userId="+data.getLongExtra("userId", -1l));
+			}
+		}
+	}
+
+
+
 	@Override
 	public void onCreateContextMenu(ContextMenu contextMenu, View v,
 			ContextMenuInfo menuInfo) {
@@ -128,7 +172,6 @@ public class NewExpenseActivity extends Activity {
 					builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
 						public void onClick(DialogInterface dialog, int which) {
 						}
-						
 					});
 					AlertDialog dialog=builder.create();
 					dialog.setTitle(getResources().getString(R.string.confirmDeleteExpense));
@@ -141,8 +184,6 @@ public class NewExpenseActivity extends Activity {
 
 	}
 	
-	
-
 
 	private boolean validateInput() {
 		if (expenseNameEditText.getText().toString().trim().equals("")) {
@@ -165,6 +206,13 @@ public class NewExpenseActivity extends Activity {
 			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyPaidUserPlease), Toast.LENGTH_SHORT).show();
 			return false;
 		}
+		// 不是所有人分摊的时候检查应该至少有人参与
+		if (!sharedByAllCheckBox.isChecked()) {
+			if (getSelectedSharedUserIds().equals("")) {
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifySharedUsersPlease), Toast.LENGTH_SHORT).show();
+			return false;
+			}
+		}
 		return true;
 	}
 	
@@ -185,25 +233,33 @@ public class NewExpenseActivity extends Activity {
 	
 	private void runReport() {
 		int headCount=userList.size();
+		// 账单数组，每个数字代表用户应收（正数）或者应付（负数）金额
 		double[] alreadyPaidAmount=new double[headCount];
 		String[] result=new String[headCount];
 		double totalAmount=0;
 		for (Expense expense : expenseList) {
-			totalAmount+=expense.getAmount();
+			double subTotalAmount=expense.getAmount();
+			totalAmount+=subTotalAmount;
+			String[] sharedUserIdArray=expense.getSharedUserIds().split(",");
+			int sharedHeadCount=sharedUserIdArray.length;
+			double average=Math.round((subTotalAmount/sharedHeadCount)*100)/100;
 			alreadyPaidAmount[getUserListPositionByUserId(expense.getPaidUserId())]+=expense.getAmount();
+			for (int i=0;i<sharedHeadCount;i++) {
+				int paidUserPosition=getUserListPositionByUserId(new Long(sharedUserIdArray[i]));
+				if (i<sharedHeadCount-1) {
+					alreadyPaidAmount[paidUserPosition]-=average;
+				} else {
+					alreadyPaidAmount[paidUserPosition]-=(subTotalAmount-(sharedHeadCount-1)*average);
+				}
+			}
 		}
 		if (totalAmount==0d) {
 			Toast.makeText(getApplicationContext(),  getResources().getString(R.string.noExpenseToDisplay), Toast.LENGTH_SHORT).show();
 			return ;
 		}
-		double average=Math.round((totalAmount/headCount)*100)/100;
+
 		for (int i=0;i<headCount;i++) {
-			String paidStr=userList.get(i).getName() + " : ";
-			if (i<headCount-1) {
-				paidStr+=alreadyPaidAmount[i]-average;
-			} else {
-				paidStr+=alreadyPaidAmount[i]-(totalAmount-average*(headCount-1));
-			}
+			String paidStr=userList.get(i).getName() + " : " + alreadyPaidAmount[i];
 			result[i]=paidStr;
 		}
 		String finalReportString="";
@@ -266,18 +322,48 @@ public class NewExpenseActivity extends Activity {
 				dialog.setTitle(getResources().getString(R.string.confirmDeleteTrip));
 				dialog.setMessage(getResources().getString(R.string.deleteTripWarning));
 				dialog.show();
-				
 				return true;
 			}
 		});
 		return true;
 	}
 
-
 	@Override
 	protected void onResume() {
 		super.onResume();
 		refreshExpenseList();
+	}
+	
+	private void initializeLayoutElements() {
+		expenseSubmitButton=(Button)findViewById(R.id.expenseSubmitButton);
+		expenseNameEditText=(EditText)findViewById(R.id.expenseNameEditText);
+		listExpenseButton=(Button)findViewById(R.id.listExpenseButton);
+		expenseAmountEditText=(EditText)findViewById(R.id.expenseAmountEditText);
+		paidUserRadioGroup=(RadioGroup)findViewById(R.id.paidUserRadioGroup);
+		runReportButton=(Button)findViewById(R.id.runReportButton);
+		sharedByAllCheckBox=(CheckBox)findViewById(R.id.sharedByAllCheckBox);
+		sharedUsersCheckBoxGroupLayout=(LinearLayout)findViewById(R.id.sharedUsersCheckBoxGroupLayout);
+		sharedUsersRadioGroupTableRow=(TableRow)findViewById(R.id.paidUserRadioGroupTableRow);
+		sharedUserCheckBoxGroupTableRow=(TableRow)findViewById(R.id.sharedUsersCheckBoxGroupTableRow);
+		sharedUsersTextViewTableRow=(TableRow)findViewById(R.id.sharedUsersTextViewTableRow);
+		sharedByAllCheckBoxTableRow=(TableRow)findViewById(R.id.sharedByAllCheckBoxTableRow);
+		paidByUserButton=(Button)findViewById(R.id.paidUserButton);
+	}
+	
+	private String getSelectedSharedUserIds() {
+		String userIdList="";
+		for (int i=0;i<sharedUsersCheckBoxGroupLayout.getChildCount();i++) {
+			CheckBox checkBox=(CheckBox)sharedUsersCheckBoxGroupLayout.getChildAt(i);
+			if (checkBox.isChecked()) {
+				User user=userList.get(i);
+				if (userIdList.equals("")) {
+					userIdList+=user.getUserId();
+				} else {
+					userIdList+=","+user.getUserId();
+				}
+			}
+		}
+		return userIdList;
 	}
 
 }

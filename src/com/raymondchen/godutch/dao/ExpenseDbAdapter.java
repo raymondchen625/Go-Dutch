@@ -17,7 +17,7 @@ import com.raymondchen.godutch.Expense;
 import com.raymondchen.godutch.Util;
 
 public class ExpenseDbAdapter {
-	private static final String DATABASE_TABLE = "expense";
+	public static final String DATABASE_TABLE = "expense";
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "expenseId";
 	// 定义各个其它字段以及它们的序号

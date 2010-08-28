@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class UserDbAdapter {
-	private static final String DATABASE_TABLE = "user";
+	public static final String DATABASE_TABLE = "user";
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "userId";
 	// 定义各个其它字段以及它们的序号
@@ -21,11 +21,13 @@ public class UserDbAdapter {
 	public static final int NAME_COLUMN = 1;
 	public static final String KEY_EMAIL = "email";
 	public static final int EMAIL_COLUMN = 2;
+	public static final String KEY_AVATAR="avatar";
+	public static final int AVATAR_COLUMN=3;
 	// 建表语句
 	public static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_NAME
-			+ " text not null, " + KEY_EMAIL + " text);";
+			+ " text not null, " + KEY_EMAIL + " text, "+ KEY_AVATAR+" BLOB);";
 	// Variable to hold the database instance
 	private SQLiteDatabase db;
 	// Context of the application using the database.
@@ -56,6 +58,7 @@ public class UserDbAdapter {
 		ContentValues newValues=new ContentValues();
 		newValues.put(KEY_NAME, user.getName());
 		newValues.put(KEY_EMAIL, user.getEmail());
+		newValues.put(KEY_AVATAR, user.getAvatar());
 		Long index=db.insert(DATABASE_TABLE, null, newValues);
 		close();
 		return index;
@@ -70,7 +73,7 @@ public class UserDbAdapter {
 
 	public List<User> getAllEntries() {
 		open();
-		Cursor cursor= db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_NAME,KEY_EMAIL },
+		Cursor cursor= db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_NAME,KEY_EMAIL,KEY_AVATAR },
 				null, null, null, null, null);
 		List<User> list=new ArrayList<User>();
 		if (cursor.moveToFirst()) {
@@ -79,6 +82,7 @@ public class UserDbAdapter {
 				user.setEmail(cursor.getString(EMAIL_COLUMN));
 				user.setName(cursor.getString(NAME_COLUMN));
 				user.setUserId(cursor.getLong(0));
+				user.setAvatar(cursor.getBlob(AVATAR_COLUMN));
 				list.add(user);
 			} while (cursor.moveToNext());
 		}
@@ -89,7 +93,7 @@ public class UserDbAdapter {
 
 	public User getEntry(long userId) {
 		open();
-		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME,KEY_EMAIL}, KEY_ID+" = ?", new String[]{userId+""}, null, null, null);
+		Cursor cursor=db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_NAME,KEY_EMAIL,KEY_AVATAR}, KEY_ID+" = ?", new String[]{userId+""}, null, null, null);
 		if (cursor.getCount()==0) {
 			return null;
 		}
@@ -97,6 +101,7 @@ public class UserDbAdapter {
 		User user=new User();
 		user.setEmail(cursor.getString(EMAIL_COLUMN));
 		user.setName(cursor.getString(NAME_COLUMN));
+		user.setAvatar(cursor.getBlob(AVATAR_COLUMN));
 		user.setUserId(cursor.getLong(0));
 		cursor.close();
 		close();
@@ -110,6 +115,7 @@ public class UserDbAdapter {
 		ContentValues updatedValues=new ContentValues();
 		updatedValues.put(KEY_NAME, user.getName());
 		updatedValues.put(KEY_EMAIL, user.getEmail());
+		updatedValues.put(KEY_AVATAR, user.getAvatar());
 		String where="userId=?";
 		db.update(DATABASE_TABLE, updatedValues, where, new String[]{user.getUserId()+""});
 		return true;

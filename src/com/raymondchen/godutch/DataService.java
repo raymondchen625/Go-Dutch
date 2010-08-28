@@ -1,5 +1,6 @@
 package com.raymondchen.godutch;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.raymondchen.godutch.dao.ExpenseDbAdapter;
 import com.raymondchen.godutch.dao.TripDbAdapter;
@@ -77,5 +78,6 @@ public class DataService {
 		UserDbAdapter userAdapter=new UserDbAdapter(context);
 		userAdapter.removeEntry(userId);
 	}
+	
 
 }

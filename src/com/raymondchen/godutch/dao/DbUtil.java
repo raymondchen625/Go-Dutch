@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbUtil {
 	
-	public static final int CURRENT_DATABASE_VERSION=1;
+	public static final int CURRENT_DATABASE_VERSION=2;
 	public static final String DATABASE_NAME="godutch.db";
 	
 	public static void checkDbSchemaVersion(Context context) {
@@ -27,7 +27,7 @@ public class DbUtil {
 						+ newVersion
 						+ ", here are the alter table statements go: "
 						);
-				updateDbSchemaVersion(oldVersion, newVersion);
+				updateDbSchemaVersion(db,oldVersion, newVersion);
 			}
 			
 		};
@@ -40,17 +40,23 @@ public class DbUtil {
 	 * @param oldVersion
 	 * @param latestVersion
 	 */
-	private static void updateDbSchemaVersion(int oldVersion, int latestVersion) {
+	private static void updateDbSchemaVersion(SQLiteDatabase db, int oldVersion, int latestVersion) {
 		if (oldVersion>=latestVersion) return;
 		System.out.println("Upgrading DB schema from "+oldVersion +" to "+(oldVersion+1));
-		oldVersion++;
+		
 		switch (oldVersion) {
+		case 1:
+			String alterUserTableSql="alter table "+UserDbAdapter.DATABASE_TABLE+" add " + UserDbAdapter.KEY_AVATAR +" BLOB";
+			System.out.println("about to run alter sql:"+alterUserTableSql);
+			db.execSQL(alterUserTableSql);
+			break;
 			case 2:
 				break;
 			case 3:
 				break;
-		}	
-		updateDbSchemaVersion(oldVersion,latestVersion);
+		}
+		oldVersion++;
+		updateDbSchemaVersion(db,oldVersion,latestVersion);
 	}
 
 

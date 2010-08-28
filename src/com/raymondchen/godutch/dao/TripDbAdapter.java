@@ -14,7 +14,7 @@ import com.raymondchen.godutch.Trip;
 import com.raymondchen.godutch.User;
 
 public class TripDbAdapter {
-	private static final String DATABASE_TABLE = "trip";
+	public static final String DATABASE_TABLE = "trip";
 
 	// The index (key) column name for use in where clauses.
 	public static final String KEY_ID = "tripId";

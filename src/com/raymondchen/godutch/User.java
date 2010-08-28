@@ -37,6 +37,17 @@ public class User {
 	 * 用户邮件
 	 */
 	private String email;
+	
+	/**
+	 * 用户头像
+	 */
+	private byte[] avatar;
+	public byte[] getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof User) {

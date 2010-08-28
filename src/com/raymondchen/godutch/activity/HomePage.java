@@ -29,10 +29,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class HomePage extends Activity {
 	
-
-	
-
-
 	private ListView listView;
 	List<Trip> tripList;
 	List<String> screenElementList;
