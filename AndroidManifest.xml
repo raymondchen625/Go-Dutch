@@ -21,6 +21,7 @@
 
 <activity android:name=".activity.ExpenseDetailActivity" android:label="@string/listExpense"></activity>
 <activity android:label="@string/selectPaidUser" android:name=".activity.SelectPaidUserActivity"></activity>
+<activity android:label="@string/sharedUsers" android:name=".activity.SelectSharedUsersActivity"></activity>
 </application>
 
 

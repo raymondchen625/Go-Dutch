@@ -19,22 +19,13 @@
 			android:layout_height="wrap_content"></EditText>
 	</TableRow>
 	<TableRow android:id="@+id/sharedUsersTextViewTableRow">
-		<TextView android:id="@+id/sharedUserTextView" android:text="@string/sharedUsers" />
-	</TableRow>
-	<TableRow android:id="@+id/sharedByAllCheckBoxTableRow" >
-	<CheckBox android:id="@+id/sharedByAllCheckBox" android:text="@string/sharedByAll" android:checked="true" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+		<Button android:id="@+id/sharedUsersButton" android:text="@string/sharedUsers" />
+		<TextView android:id="@+id/sharedUserTextView" android:text="@string/everyone" />
 	</TableRow>
 
-	<TableRow android:id="@+id/sharedUsersCheckBoxGroupTableRow" android:visibility="gone" >
-	<LinearLayout android:id="@+id/sharedUsersCheckBoxGroupLayout" android:orientation="vertical"  />
-	</TableRow>
 	<TableRow>
 	<Button android:id="@+id/paidUserButton" android:text="@string/paidUser" />
 	<TextView android:id="@+id/paidByUserTextView" android:text=""/>
-	</TableRow>
-	
-	<TableRow android:id="@+id/paidUserRadioGroupTableRow" >
-	<RadioGroup android:id="@+id/paidUserRadioGroup" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioGroup>
 	</TableRow>
 
 	<TableRow>

@@ -49,21 +49,19 @@ public class NewExpenseActivity extends Activity {
 	private Button runReportButton;
 	private EditText expenseNameEditText;
 	private EditText expenseAmountEditText;
-	private RadioGroup paidUserRadioGroup;
 	private Trip trip;
 	private List<User> userList;
 	private String expenseName;
 	private double expenseAmount;
-	private CheckBox sharedByAllCheckBox;
-	private LinearLayout sharedUsersCheckBoxGroupLayout;
-	private TableRow sharedUsersRadioGroupTableRow;
-	private TableRow sharedUsersTextViewTableRow;
-	private TableRow sharedByAllCheckBoxTableRow;
-	private TableRow sharedUserCheckBoxGroupTableRow;
+	private long paidUserId=-1;
+	private String sharedUserIdList;
 	private Button paidByUserButton;
-	private Button paidByUserTextView;
+	private TextView paidByUserTextView;
+	private Button sharedUsersButton;
+	private TextView sharedUserTextView;
 	List<Expense> expenseList;
 	private static final int REQUEST_CODE_SELECT_PAID_USER=0;
+	private static final int REQUEST_CODE_SELECT_SHARED_USERS=1;
 	
 	
 	
@@ -73,26 +71,19 @@ public class NewExpenseActivity extends Activity {
 		long tripId=getIntent().getExtras().getLong("tripId");
 		trip=DataService.getTripById(getApplicationContext(), tripId);
 		userList=trip.getMembers();
+		sharedUserIdList=trip.getMemberIds();
 		setContentView(R.layout.new_expense);
 		initializeLayoutElements();
 		refreshExpenseList();
-		for (User user : userList) {
-			RadioButton radioButton=new RadioButton(getApplicationContext());
-			radioButton.setText(user.getName());
-			paidUserRadioGroup.addView(radioButton);
-			CheckBox checkBox=new CheckBox(getApplicationContext());
-			checkBox.setText(user.getName());
-			sharedUsersCheckBoxGroupLayout.addView(checkBox);
-		}
 		expenseSubmitButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (validateInput()) {
 					Expense expense=new Expense();
 					expense.setName(expenseName);
 					expense.setAmount(expenseAmount);
-					expense.setSharedUserIds(sharedByAllCheckBox.isChecked()?trip.getMemberIds():getSelectedSharedUserIds());
+					expense.setSharedUserIds(sharedUserIdList);
 					expense.setTripId(trip.getTripId());
-					expense.setPaidUserId(getCheckedPaidUser().getUserId());
+					expense.setPaidUserId(paidUserId);
 					DataService.addExpense(getApplicationContext(), expense);
 					Toast.makeText(getApplicationContext(), getResources().getString(R.string.addExpenseSucceeded), Toast.LENGTH_SHORT).show();
 					expenseNameEditText.setText("");
@@ -117,20 +108,20 @@ public class NewExpenseActivity extends Activity {
 				runReport();
 			}
 		});
-		sharedByAllCheckBox.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if (sharedByAllCheckBox.isChecked()) {
-					sharedUserCheckBoxGroupTableRow.setVisibility(TableRow.GONE);
-				} else {
-					sharedUserCheckBoxGroupTableRow.setVisibility(TableRow.VISIBLE);
-				}
-			}
-		});
+
 		paidByUserButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent=new Intent(getApplicationContext(),SelectPaidUserActivity.class);
 				intent.putExtra("tripId", trip.getTripId());
 				startActivityForResult(intent, REQUEST_CODE_SELECT_PAID_USER);
+			}
+		});
+		sharedUsersButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent=new Intent(getApplicationContext(),SelectSharedUsersActivity.class);
+				intent.putExtra("tripId",trip.getTripId());
+				startActivityForResult(intent, REQUEST_CODE_SELECT_SHARED_USERS);
 			}
 		});
 	}
@@ -142,7 +133,17 @@ public class NewExpenseActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode==REQUEST_CODE_SELECT_PAID_USER) {
 			if (resultCode==Activity.RESULT_OK) {
-				System.out.println("userId="+data.getLongExtra("userId", -1l));
+				Bundle bundle=data.getBundleExtra(getPackageName());
+				paidUserId=bundle.getLong("userId", -1l);
+				if (paidUserId!=-1) {
+					refreshPaidUserDisplay();
+				}
+			}
+		} else if (requestCode==REQUEST_CODE_SELECT_SHARED_USERS) {
+			Bundle bundle=data.getBundleExtra(getPackageName());
+			sharedUserIdList=bundle.getString("userIdList");
+			if (paidUserId!=-1) {
+				refreshSharedUsersDisplay();
 			}
 		}
 	}
@@ -202,16 +203,14 @@ public class NewExpenseActivity extends Activity {
 			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyExpenseAmount), Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (paidUserRadioGroup.getCheckedRadioButtonId()<0) {
+		if (paidUserId<=0) {
 			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifyPaidUserPlease), Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		// 不是所有人分摊的时候检查应该至少有人参与
-		if (!sharedByAllCheckBox.isChecked()) {
-			if (getSelectedSharedUserIds().equals("")) {
+		if (sharedUserIdList.equals("")) {
 			Toast.makeText(getApplicationContext(), getResources().getString(R.string.specifySharedUsersPlease), Toast.LENGTH_SHORT).show();
 			return false;
-			}
 		}
 		return true;
 	}
@@ -220,16 +219,7 @@ public class NewExpenseActivity extends Activity {
 		expenseList=DataService.getExpenseListByTripId(getApplicationContext(), this.trip.getTripId());
 		registerForContextMenu(listExpenseButton);
 	}
-	
-	private User getCheckedPaidUser() {
-		for (int i=0;i<paidUserRadioGroup.getChildCount();i++) {
-			RadioButton rb=(RadioButton)paidUserRadioGroup.getChildAt(i);
-			if (rb.isChecked()) {
-				return userList.get(i);
-			}
-		}
-		return null;
-	}
+
 	
 	private void runReport() {
 		int headCount=userList.size();
@@ -339,31 +329,48 @@ public class NewExpenseActivity extends Activity {
 		expenseNameEditText=(EditText)findViewById(R.id.expenseNameEditText);
 		listExpenseButton=(Button)findViewById(R.id.listExpenseButton);
 		expenseAmountEditText=(EditText)findViewById(R.id.expenseAmountEditText);
-		paidUserRadioGroup=(RadioGroup)findViewById(R.id.paidUserRadioGroup);
 		runReportButton=(Button)findViewById(R.id.runReportButton);
-		sharedByAllCheckBox=(CheckBox)findViewById(R.id.sharedByAllCheckBox);
-		sharedUsersCheckBoxGroupLayout=(LinearLayout)findViewById(R.id.sharedUsersCheckBoxGroupLayout);
-		sharedUsersRadioGroupTableRow=(TableRow)findViewById(R.id.paidUserRadioGroupTableRow);
-		sharedUserCheckBoxGroupTableRow=(TableRow)findViewById(R.id.sharedUsersCheckBoxGroupTableRow);
-		sharedUsersTextViewTableRow=(TableRow)findViewById(R.id.sharedUsersTextViewTableRow);
-		sharedByAllCheckBoxTableRow=(TableRow)findViewById(R.id.sharedByAllCheckBoxTableRow);
 		paidByUserButton=(Button)findViewById(R.id.paidUserButton);
+		paidByUserTextView=(TextView)findViewById(R.id.paidByUserTextView);
+		sharedUsersButton=(Button)findViewById(R.id.sharedUsersButton);
+		sharedUserTextView=(TextView)findViewById(R.id.sharedUserTextView);
 	}
 	
-	private String getSelectedSharedUserIds() {
-		String userIdList="";
-		for (int i=0;i<sharedUsersCheckBoxGroupLayout.getChildCount();i++) {
-			CheckBox checkBox=(CheckBox)sharedUsersCheckBoxGroupLayout.getChildAt(i);
-			if (checkBox.isChecked()) {
-				User user=userList.get(i);
-				if (userIdList.equals("")) {
-					userIdList+=user.getUserId();
-				} else {
-					userIdList+=","+user.getUserId();
-				}
+
+
+	private void refreshPaidUserDisplay() {
+		for (User user : userList) {
+			if (paidUserId==user.getUserId()) {
+				paidByUserTextView.setText(user.getName());
+				return ;
 			}
 		}
-		return userIdList;
+		paidByUserTextView.setText("");
 	}
-
+	
+	private void refreshSharedUsersDisplay() {
+		String[] sharedIdStrList=this.sharedUserIdList.split(",");
+		if (sharedIdStrList.length==userList.size()) {
+			sharedUserTextView.setText(getResources().getString(R.string.everyone));
+		} else {
+			String result="";
+			for (int i=0;i<sharedIdStrList.length;i++) {
+				if (result.equals("")) {
+					result=getUserNameById(new Long(sharedIdStrList[i]));
+				} else {
+					result+=","+getUserNameById(new Long(sharedIdStrList[i]));
+				}
+			}
+			sharedUserTextView.setText(result);
+		}
+	}
+	
+	private String getUserNameById(long userId) {
+		for (User user : userList) {
+			if (user.getUserId()==userId) {
+				return user.getName();
+			}
+		}
+		return "";
+	}
 }
