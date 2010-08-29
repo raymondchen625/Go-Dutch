@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
-	android:orientation="horizontal" android:stretchColumns="1" >
+	android:orientation="horizontal" android:stretchColumns="0,2" android:shrinkColumns="1">
 	<TableRow>
 		<TextView android:text="@string/expenseName" android:id="@+id/expenseNameTextView"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
 		<EditText android:id="@+id/expenseNameEditText" android:text=""
-			android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
 	</TableRow>
 	<TableRow>
 		<TextView android:id="@+id/expenseAmountTextView"
@@ -15,7 +15,7 @@
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
 		<EditText android:id="@+id/expenseAmountEditText"
-			android:text="" android:layout_width="fill_parent"
+			android:text="" android:layout_width="wrap_content"
 			android:layout_height="wrap_content"></EditText>
 	</TableRow>
 	<TableRow android:id="@+id/sharedUsersTextViewTableRow">

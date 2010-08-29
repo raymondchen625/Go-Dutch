@@ -7,7 +7,7 @@
 <string name="quickAddTransaction">Quick-add Expense</string>
 <string name="menuNameAbout">About</string>
 <string name="menuNameSetting">Settings</string>
-<string name="menuNameUserManagement">User Management</string>
+<string name="menuNameUserManagement">User Admin</string>
 <string name="activityNumberOnHomePage">Trip Number on Homepage</string>
 <string name="displayTaxRate">Show Tax Rate</string>
 <string name="thankyou">Thank you for using Go Dutch!</string>

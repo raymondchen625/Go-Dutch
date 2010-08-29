@@ -1,6 +1,5 @@
 package com.raymondchen.godutch.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.raymondchen.godutch.DataService;
@@ -11,14 +10,10 @@ import com.raymondchen.godutch.User;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.test.PerformanceTestCase;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,19 +21,9 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
-import android.view.View.OnCreateContextMenuListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TableRow;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,19 +47,30 @@ public class NewExpenseActivity extends Activity {
 	List<Expense> expenseList;
 	private static final int REQUEST_CODE_SELECT_PAID_USER=0;
 	private static final int REQUEST_CODE_SELECT_SHARED_USERS=1;
-	
-	
+	private SharedPreferences sharedPreferences;
+	private static final String LAST_PAID_USER_ID="lastPaidUserId";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		long tripId=getIntent().getExtras().getLong("tripId");
 		trip=DataService.getTripById(getApplicationContext(), tripId);
+		sharedPreferences=getSharedPreferences(getPackageName(), MODE_PRIVATE);
 		userList=trip.getMembers();
 		sharedUserIdList=trip.getMemberIds();
 		setContentView(R.layout.new_expense);
 		initializeLayoutElements();
 		refreshExpenseList();
+		// try to get saved last paid UserID
+		long savedLastPaidUserId=sharedPreferences.getLong(LAST_PAID_USER_ID, -1L);
+		if (savedLastPaidUserId!=-1L) {
+			for (User user : userList) {
+				if (user.getUserId()==savedLastPaidUserId) {
+					paidUserId=savedLastPaidUserId;
+					refreshPaidUserDisplay();
+				}
+			}
+		}
 		expenseSubmitButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (validateInput()) {
@@ -85,6 +81,10 @@ public class NewExpenseActivity extends Activity {
 					expense.setTripId(trip.getTripId());
 					expense.setPaidUserId(paidUserId);
 					DataService.addExpense(getApplicationContext(), expense);
+					// save last paid userId
+					SharedPreferences.Editor editor = sharedPreferences.edit();
+					editor.putLong(LAST_PAID_USER_ID, paidUserId);
+					editor.commit();
 					Toast.makeText(getApplicationContext(), getResources().getString(R.string.addExpenseSucceeded), Toast.LENGTH_SHORT).show();
 					expenseNameEditText.setText("");
 					expenseAmountEditText.setText("");
@@ -117,13 +117,15 @@ public class NewExpenseActivity extends Activity {
 			}
 		});
 		sharedUsersButton.setOnClickListener(new OnClickListener() {
-			
 			public void onClick(View v) {
 				Intent intent=new Intent(getApplicationContext(),SelectSharedUsersActivity.class);
 				intent.putExtra("tripId",trip.getTripId());
+				intent.putExtra("sharedUserIdList", sharedUserIdList);
 				startActivityForResult(intent, REQUEST_CODE_SELECT_SHARED_USERS);
 			}
 		});
+		
+		
 	}
 	
 	
@@ -140,9 +142,9 @@ public class NewExpenseActivity extends Activity {
 				}
 			}
 		} else if (requestCode==REQUEST_CODE_SELECT_SHARED_USERS) {
+			if (resultCode==Activity.RESULT_OK) {
 			Bundle bundle=data.getBundleExtra(getPackageName());
 			sharedUserIdList=bundle.getString("userIdList");
-			if (paidUserId!=-1) {
 				refreshSharedUsersDisplay();
 			}
 		}
