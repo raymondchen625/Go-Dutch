@@ -84,13 +84,10 @@ public class UserManagementActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		System.out.println("resultCode=" + resultCode);
 		if (resultCode == Activity.RESULT_OK) {
-			System.out.println("data=" + data);
 			Uri uri = data.getData();
 			ContentResolver resolver = getContentResolver();
 			Cursor cursor = resolver.query(uri, null, null, null, null);
-			System.out.println("cursor=" + cursor);
 			if (cursor.moveToFirst()) {
 				int idIdx = cursor
 						.getColumnIndexOrThrow(ContactsContract.Contacts._ID);
@@ -98,23 +95,16 @@ public class UserManagementActivity extends Activity {
 				String name = cursor.getString(cursor
 						.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
 				Cursor avatarCursor=resolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.CommonDataKinds.Photo.CONTACT_ID+"=?", new String[]{Long.toString(id)}, null);
-				System.out.println("avatarCursor=null?"+(avatarCursor==null));
 				byte[] avatar=null;
 				if (avatarCursor.moveToFirst()) {
 					do {
 					avatar=avatarCursor.getBlob(avatarCursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO));
-					System.out.println("record found: "+avatarCursor.getCount());
 					if (avatar!=null) {
 						break ;
 					}
 					} while (avatarCursor.moveToNext());
 				}
 				avatarCursor.close();
-				System.out.println("avatar="+avatar);
-				if (avatar!=null) {
-				Bitmap avatarBitmap=BitmapFactory.decodeByteArray(avatar, 0, avatar.length);
-				System.out.println("avatarBitmap created! height="+avatarBitmap.getHeight()+", width="+avatarBitmap.getWidth());
-				}
 				String email="";
 				Cursor mailCursor=resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID+"=?", new String[]{Long.toString(id)}, null);
 				if (mailCursor.moveToFirst()) {
@@ -131,9 +121,7 @@ public class UserManagementActivity extends Activity {
 			}
 			cursor.close();
 			initializeScreenElements();
-		} else {
-			System.out.println("canceled");
-		}
+		} 
 	}
 
 	private void initializeScreenElements() {
