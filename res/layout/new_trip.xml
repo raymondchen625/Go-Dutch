@@ -3,19 +3,17 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:orientation="horizontal"  android:stretchColumns="1"
+  android:orientation="horizontal"  android:shrinkColumns="0,1" 
   >
   	<TableRow>
   	<TextView android:text="@string/newTrip" android:id="@+id/newTripNameTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:text="" android:id="@+id/newTripEditText" android:gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+	<EditText android:text="" android:id="@+id/newTripEditText" android:gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="false"></EditText>
   	</TableRow>
   	<TableRow>
   	<TextView android:text="@string/selectedUsers" android:id="@+id/selectedUserLableTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+  	<TextView android:text="" android:id="@+id/selectedUserListTextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="false" />
 	</TableRow>
 	<TableRow>
-	<TextView android:text="" android:id="@+id/selectedUserListTextView" android:gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</TableRow>
-	<TableRow android:stretchColumns="">
 	<Button android:text="@string/add" android:id="@+id/addTripButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
     <Button android:text="@string/selectUsers" android:id="@+id/selectUsersButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 	</TableRow>
