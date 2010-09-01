@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 public class HomePage extends Activity {
 	
@@ -101,6 +102,7 @@ public class HomePage extends Activity {
 			}
 		});
 		initializeScreenElements();
+		Toast.makeText(getApplicationContext(), getResources().getString(R.string.homepageHint), Toast.LENGTH_LONG).show();
 	}
 
 	private void initializeScreenElements() {

@@ -4,7 +4,6 @@
 <string name="version">版本 1.0</string>
 <string name="newTrip">新建活动</string>
 <string name="newUser">新建用户</string>
-<string name="quickAddTransaction">快速添加账务</string>
 <string name="menuNameAbout">关于</string>
 <string name="menuNameSetting">设置</string>
 <string name="menuNameUserManagement">用户管理</string>
@@ -19,44 +18,29 @@
 <string name="about">关于</string>
 <string name="username">姓名</string>
 <string name="add">添加</string>
-<string name="inputnewuserinfo">请填写姓名</string>
-<string name="addusersucceeded">用户已成功添加</string>
 <string name="selectedUsers">已选择用户 </string>
 <string name="selectUsers">选择用户</string>
 <string name="create">创建</string>
 <string name="join">参加</string>
 <string name="notjoin">不参加</string>
 <string name="confirm">确认</string>
-<string name="selectUsersPlease">请选择至少2个用户</string>
-<string name="specifyTripNamePlease">请输入活动名称</string>
-<string name="addTripSucceeded">活动已成功添加</string>
 <string name="expenseName">支付项目名</string>
 <string name="expenseAmount">金额</string>
 <string name="newExpense">新增支出项目</string>
 <string name="sharedByAll">所有人分摊</string>
-<string name="specifyExpenseNamePlease">请输入支付项目名称</string>
-<string name="specifyExpenseAmount">请输入正确的支付金额</string>
-<string name="zeroAmountIllegal">支付金额不能为零</string>
-<string name="specifyPaidUserPlease">请指定支付人</string>
-<string name="addExpenseSucceeded">支付项目已成功添加</string>
+
 <string name="sharedUsers">参与分摊</string>
 <string name="paidUser">付款人</string>
-<string name="listExpense">查看已支付列表</string>
+<string name="listExpense">已支付列表</string>
 <string name="runReport">算账</string>
-<string name="noExpenseToDisplay">没有已发生的支付项目</string>
 <string name="currentTrips">当前活动列表</string>
 <string name="delete">删除</string>
 <string name="menuNameDeleteTrip">删除活动</string>
 <string name="cancel">取消</string>
 <string name="back">返回</string>
-<string name="confirmDeleteUser">删除用户？</string>
-<string name="deleteUserWarning">此用户参加的活动也将会被删除，确定吗？</string>
-<string name="confirmDeleteExpense">删除支付项目？</string>
-<string name="deleteExpenseWarning">真的删除这项支付项目吗？</string>
-<string name="confirmDeleteTrip">删除活动？</string>
-<string name="deleteTripWarning">真的删除这个活动吗？</string>
+
 <string name="importFromContacts">从通讯录添加</string>
-<string name="specifySharedUsersPlease">请至少选择一个参与分摊人</string>
+
 <string name="tripName">活动</string>
 <string name="tripMembers">成员</string>
 <string name="everyone">所有人</string>

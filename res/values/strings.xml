@@ -4,7 +4,6 @@
 <string name="version">Version 1.0</string>
 <string name="newTrip">Create Trip</string>
 <string name="newUser">Create User</string>
-<string name="quickAddTransaction">Quick-add Expense</string>
 <string name="menuNameAbout">About</string>
 <string name="menuNameSetting">Settings</string>
 <string name="menuNameUserManagement">User Admin</string>
@@ -19,44 +18,30 @@
 <string name="about">About</string>
 <string name="username">Name</string>
 <string name="add">Add</string>
-<string name="inputnewuserinfo">Please specify name</string>
-<string name="addusersucceeded">New user added</string>
+
 <string name="selectedUsers">Selected Users </string>
 <string name="selectUsers">Select Users</string>
 <string name="create">Create</string>
 <string name="join">Joined</string>
 <string name="notjoin">Not Joined</string>
 <string name="confirm">Confirm</string>
-<string name="selectUsersPlease">Please select at least 2 users</string>
-<string name="specifyTripNamePlease">Please specify trip name</string>
-<string name="addTripSucceeded">New trip added</string>
+
 <string name="expenseName">Expense Name</string>
 <string name="expenseAmount">Amount</string>
 <string name="newExpense">New Expense</string>
 <string name="sharedByAll">Shared by All</string>
-<string name="specifyExpenseNamePlease">Please specify expense name</string>
-<string name="specifyExpenseAmount">Please specify expense amount in correct format</string>
-<string name="zeroAmountIllegal">0 is invalid expense amount</string>
-<string name="specifyPaidUserPlease">Please specify paid user</string>
-<string name="addExpenseSucceeded">New expense added</string>
 <string name="sharedUsers">Shared by</string>
 <string name="paidUser">Paid by</string>
 <string name="listExpense">Expense List</string>
 <string name="runReport">Report</string>
-<string name="noExpenseToDisplay">Empty expense history</string>
 <string name="currentTrips">Current Trips</string>
 <string name="delete">Delete</string>
 <string name="menuNameDeleteTrip">Delete Trip</string>
 <string name="cancel">Cancel</string>
 <string name="back">Return</string>
-<string name="confirmDeleteUser">Delete User?</string>
-<string name="deleteUserWarning">All trips joined by this user will also be deleted. Are you sure?</string>
-<string name="confirmDeleteExpense">Delete Expense?</string>
-<string name="deleteExpenseWarning">Are you sure to delete this expense?</string>
-<string name="confirmDeleteTrip">Delete Trip?</string>
-<string name="deleteTripWarning">Are you sure to delete this trip?</string>
+
 <string name="importFromContacts">Add from Contacts</string>
-<string name="specifySharedUsersPlease">Please specify at least one shared user</string>
+
 <string name="tripName">Trip</string>
 <string name="tripMembers">Members</string>
 <string name="everyone">Everyone</string>
