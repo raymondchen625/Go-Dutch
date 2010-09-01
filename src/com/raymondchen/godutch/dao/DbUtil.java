@@ -43,11 +43,9 @@ public class DbUtil {
 	private static void updateDbSchemaVersion(SQLiteDatabase db, int oldVersion, int latestVersion) {
 		if (oldVersion>=latestVersion) return;
 		System.out.println("Upgrading DB schema from "+oldVersion +" to "+(oldVersion+1));
-		
 		switch (oldVersion) {
 		case 1:
 			String alterUserTableSql="alter table "+UserDbAdapter.DATABASE_TABLE+" add " + UserDbAdapter.KEY_AVATAR +" BLOB";
-			System.out.println("about to run alter sql:"+alterUserTableSql);
 			db.execSQL(alterUserTableSql);
 			break;
 			case 2:
