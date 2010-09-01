@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="selectUsersPlease">请选择至少2个用户</string>
+<string name="specifyTripNamePlease">请输入活动名称</string>
+<string name="addTripSucceeded">活动已成功添加</string>
+<string name="specifyExpenseNamePlease">请输入支付项目名称</string>
+<string name="specifyExpenseAmount">请输入正确的支付金额</string>
+<string name="zeroAmountIllegal">支付金额不能为零</string>
+<string name="specifyPaidUserPlease">请指定支付人</string>
+<string name="inputnewuserinfo">请填写姓名</string>
+<string name="addusersucceeded">用户已成功添加</string>
+<string name="addExpenseSucceeded">支付项目已成功添加</string>
+<string name="noExpenseToDisplay">没有已发生的支付项目</string>
+<string name="specifySharedUsersPlease">请至少选择一个参与分摊人</string>
+<string name="homepageHint">记录和计算分摊费用，先要创建一个活动，并且指定活动的参加成员名单。</string>
+</resources>

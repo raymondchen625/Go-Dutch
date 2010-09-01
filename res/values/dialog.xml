@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="confirmDeleteUser">Delete User?</string>
+<string name="deleteUserWarning">All trips joined by this user will also be deleted. Are you sure?</string>
+<string name="confirmDeleteExpense">Delete Expense?</string>
+<string name="deleteExpenseWarning">Are you sure to delete this expense?</string>
+<string name="confirmDeleteTrip">Delete Trip?</string>
+<string name="deleteTripWarning">Are you sure to delete this trip?</string>
+</resources>
